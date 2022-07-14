@@ -1,3 +1,9 @@
+
+
+
+
+
+
 int echo_pin=33;
 int trig_pin=25;
 
@@ -13,14 +19,83 @@ long getdistance(){
     return distanceCM;
 
 }
-void setup(){
-    Serial.begin(9600);
-    pinMode(echo_pin, OUTPUT);
-    pinMode(trig_pin, INPUT);
+
+int right_down=12;
+int right_reverse=26;
+int left_down= 13;
+int left_reverse= 27;
+
+int distance;
+
+
+void front(){
+    digitalWrite(right_down,HIGH);
+    digitalWrite(left_down,HIGH);
+    digitalWrite(right_reverse,LOW);
+    digitalWrite(left_reverse,LOW);
+}
+void right(){
+    digitalWrite(right_down,HIGH);
+    digitalWrite(right_reverse,LOW);
+    digitalWrite(left_down,LOW);
+    digitalWrite(left_reverse,HIGH);
+   
+}
+void left(){
+    digitalWrite(right_reverse,HIGH);
+    digitalWrite(left_down,HIGH);
+    digitalWrite(left_reverse,LOW);
+    digitalWrite(right_down,LOW);
+    
+}
+void behind(){
+    digitalWrite(right_reverse,HIGH);
+    digitalWrite(left_reverse,HIGH);
+    digitalWrite(right_down,LOW);
+    digitalWrite(left_down,LOW);
+    
+}
+void stop(){
+    digitalWrite(right_down,LOW);
+    digitalWrite(right_reverse,LOW);
+    digitalWrite(left_down,LOW);
+    digitalWrite(left_reverse,LOW);
 }
 
+void turnLeft(){
+    left();
+    delay(1000);
+    front();
+}
+void turnRight(){
+    right();
+    delay(1000);
+    front();
+}
+void move_forward(){
+    front();
+    delay(5000);
+}
+void move_backward(){
+    behind();
+    delay(3000);
+}
+void setup(){
+    Serial.begin(9600);
+    pinMode(right_down, OUTPUT);
+    pinMode(right_reverse, OUTPUT);
+    pinMode(left_down, OUTPUT);
+    pinMode(left_reverse, OUTPUT);
+    pinMode(trig_pin, OUTPUT);
+    pinMode(echo_pin, INPUT);
+}
 void loop(){
-     int distance = getdistance();
-    Serial.println(distance);
+    distance=getdistance();;
+    if(distance>10){
+        turnLeft();
+    }
+    else if(distance>=10){
+        turnRight();
+    }
 
 }
