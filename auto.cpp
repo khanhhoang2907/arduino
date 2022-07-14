@@ -32,20 +32,28 @@ int left_reverse= 27;
 void front(){
     digitalWrite(right_down,HIGH);
     digitalWrite(left_down,HIGH);
+    digitalWrite(right_reverse,LOW);
+    digitalWrite(left_reverse,LOW);
 }
 void left(){
     digitalWrite(right_down,HIGH);
     digitalWrite(right_reverse,HIGH);
+    digitalWrite(left_down,LOW);
+    digitalWrite(left_reverse,LOW);
    
 }
 void right(){
     digitalWrite(right_reverse,HIGH);
     digitalWrite(left_down,HIGH);
+    digitalWrite(left_reverse,LOW);
+    digitalWrite(right_down,LOW);
     
 }
 void behind(){
     digitalWrite(right_reverse,HIGH);
     digitalWrite(left_reverse,HIGH);
+    digitalWrite(right_down,LOW);
+    digitalWrite(left_down,LOW);
     
 }
 void stop(){
@@ -82,17 +90,13 @@ void setup(){
 
 }
 void loop(){
-    digitalWrite(right_down,LOW);
-    digitalWrite(right_reverse,LOW);
-    digitalWrite(left_down,LOW);
-    digitalWrite(left_reverse,LOW);
-
     turnLeft();
-    delay(500);
+    delay(1000);
     turnRight();
-    delay(500);
+    delay(1000);
     move_forward();
-    delay(100);
+    delay(1000);
     move_backward();
-    delay(100);
+    delay(1000);
+
     }
