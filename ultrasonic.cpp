@@ -91,11 +91,11 @@ void setup(){
 }
 void loop(){
     distance=getdistance();;
-    if(distance>10){
-        turnLeft();
+    if(distance<50){
+        behind();
     }
-    else if(distance>=10){
-        turnRight();
+    else if(distance>=50){
+        front();
     }
 
 }
