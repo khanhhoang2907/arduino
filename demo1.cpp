@@ -1,12 +1,12 @@
 #include<WiFi.h>
 #include "PubSubClient.h"
 
-const char* ssid = "Wokwi-GUEST";
-const char* password = "";
+const char* ssid = "Hoang Anh 5Ghz";
+const char* password = "88889999";
 const char* mqttServer = "test.mosquitto.org";
 int port = 1883;
 
-
+// 4 18 19 21 22 23  13 12 27 26 25  33 32 35 34    
 // hut but
 int trig_pin=22;
 int echo_pin=23;
