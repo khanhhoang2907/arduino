@@ -37,9 +37,9 @@ void front(){
 }
 void left(){
     digitalWrite(right_down,HIGH);
-    digitalWrite(right_reverse,HIGH);
+    digitalWrite(right_reverse,LOW);
     digitalWrite(left_down,LOW);
-    digitalWrite(left_reverse,LOW);
+    digitalWrite(left_reverse,HIGH);
    
 }
 void right(){
