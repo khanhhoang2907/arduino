@@ -8,22 +8,35 @@ int port = 1883;
 
 // 4 18 19 21 22 23  13 12 27 26 25  33 32 35 34    
 // hut but
-int trig_pin=25;
-int echo_pin=33;
+int trig_pin=22;
+int echo_pin=23;
 int distanceCm;
 int distannceR=0;
 int distanceL=0;
 
+
+
 // dong co
+int right_down=2;
+int right_reverse=12;
+int left_down= 5;
+int left_reverse= 15;
 
-int right_down=12;
-int right_reverse=26;
-int left_down= 13;
-int left_reverse= 27;
-
-
+int led_hut=19;
 char d[50]={""};
 
+long getDistance(){
+  digitalWrite(trig_pin,LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig_pin,HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig_pin,LOW);
+
+  long duration =pulseIn(echo_pin,HIGH);
+  long distanceCm= duration*0.034/2;
+  return distanceCm;
+
+}
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -55,6 +68,28 @@ void mqttReconnect(){
 
 // seting ai
 
+int lookRight()
+{
+    myservo.write(50); 
+    delay(500);
+    int distance = readPing();
+    delay(100);
+    myservo.write(115); 
+    return distance;
+}
+
+int lookLeft()
+{
+    myservo.write(170); 
+    delay(500);
+    int distance = readPing();
+    delay(100);
+    myservo.write(115); 
+    return distance;
+    delay(100);
+}
+
+//
 
 void front(){
     digitalWrite(right_down,HIGH);
@@ -129,44 +164,47 @@ void callback(char* topic, byte* message, unsigned int length){
   }
 
 
-    else if(stMessage =="front"){   // front 
-        on_front=!on_front;
-        if(on_front==true){
-            front();
-        }
-        else{
-            stop();
-        }
-        
-    }
-    else if(stMessage =="left"){  //left
-        on_left=!on_left;
-        if(on_left==true){
-            left();
-        }
-        else
-            stop();
-        
-    }
-    else if(stMessage =="right"){  //right
-        on_right=!on_right;
-        if(on_right==true){
-            right();
-        }
-        else 
-        stop();
-        
-    }
-    else if(stMessage =="behind"){  // behind
-        on_behind=!on_behind;
-        if(on_behind==true){
-            behind();
-    }
-    else
-        stop();
-    }
-    
-}
+// AI
+   
+
+            else if(stMessage =="front"){   // front 
+                on_front=!on_front;
+                if(on_front==true){
+                    front();
+                }
+                else{
+                    stop();
+                }
+                
+            }
+            else if(stMessage =="left"){  //left
+                on_left=!on_left;
+                if(on_left==true){
+                    left();
+                }
+                else
+                    stop();
+                
+            }
+            else if(stMessage =="right"){  //right
+                on_right=!on_right;
+                if(on_right==true){
+                    right();
+                }
+                else 
+                stop();
+                
+            }
+            else if(stMessage =="behind"){  // behind
+                on_behind=!on_behind;
+                if(on_behind==true){
+                    behind();
+            }
+            else
+                stop();
+            }
+            
+}   
 
 
  

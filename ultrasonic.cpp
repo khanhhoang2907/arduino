@@ -34,14 +34,14 @@ void front(){
     digitalWrite(right_reverse,LOW);
     digitalWrite(left_reverse,LOW);
 }
-void right(){
+void left(){
     digitalWrite(right_down,HIGH);
     digitalWrite(right_reverse,LOW);
     digitalWrite(left_down,LOW);
     digitalWrite(left_reverse,HIGH);
    
 }
-void left(){
+void (){
     digitalWrite(right_reverse,HIGH);
     digitalWrite(left_down,HIGH);
     digitalWrite(left_reverse,LOW);
