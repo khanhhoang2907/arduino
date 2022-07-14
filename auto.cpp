@@ -65,12 +65,12 @@ void stop(){
 
 void turnLeft(){
     left();
-    delay(500);
+    delay(5000);
     front();
 }
 void turnRight(){
     right();
-    delay(500);
+    delay(5000);
     front();
 }
 void move_forward(){
