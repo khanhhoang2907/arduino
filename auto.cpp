@@ -82,6 +82,11 @@ void setup(){
 
 }
 void loop(){
+    digitalWrite(right_down,LOW);
+    digitalWrite(right_reverse,LOW);
+    digitalWrite(left_down,LOW);
+    digitalWrite(left_reverse,LOW);
+
     turnLeft();
     delay(500);
     turnRight();
