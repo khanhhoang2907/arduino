@@ -35,14 +35,14 @@ void front(){
     digitalWrite(right_reverse,LOW);
     digitalWrite(left_reverse,LOW);
 }
-void left(){
+void right(){
     digitalWrite(right_down,HIGH);
     digitalWrite(right_reverse,LOW);
     digitalWrite(left_down,LOW);
     digitalWrite(left_reverse,HIGH);
    
 }
-void right(){
+void left(){
     digitalWrite(right_reverse,HIGH);
     digitalWrite(left_down,HIGH);
     digitalWrite(left_reverse,LOW);
@@ -65,21 +65,21 @@ void stop(){
 
 void turnLeft(){
     left();
-    delay(5000);
+    delay(1000);
     front();
 }
 void turnRight(){
     right();
-    delay(5000);
+    delay(1000);
     front();
 }
 void move_forward(){
     front();
-    delay(500);
+    delay(5000);
 }
 void move_backward(){
     behind();
-    delay(100);
+    delay(3000);
 }
 void setup(){
     Serial.begin(9600);
@@ -90,13 +90,6 @@ void setup(){
 
 }
 void loop(){
-    turnLeft();
-    delay(1000);
-    turnRight();
-    delay(1000);
-    move_forward();
-    delay(1000);
-    move_backward();
-    delay(1000);
+    
 
     }
