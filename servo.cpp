@@ -2,8 +2,9 @@
 
 
 
-#include< Servo.h>
+#include <Servo.h>
 Servo myservo;
+
 void setup() {
     Serial.begin(9600);
     myservo.attach(25);
@@ -39,8 +40,7 @@ int lookLeft()
 //   return cm;
 // }
 void loop() { 
-   lookLeft();
-lookRight(); 
+   
 
 }
 
