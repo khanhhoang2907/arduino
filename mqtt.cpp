@@ -173,10 +173,11 @@ void callback(char* topic, byte* message, unsigned int length){
 void setup() {
   Serial.begin(9600);
   Serial.print("Connecting to WiFi");
-  pinMode(12,OUTPUT);
-  pinMode(2,OUTPUT);
-  pinMode(19,OUTPUT);
-  pinMode(5,OUTPUT);
+  pinMode(right_down,OUTPUT);
+  pinMode(right_reverse,OUTPUT);
+  pinMode(left_down,OUTPUT);
+  pinMode(left_reverse,OUTPUT);
+  pinMode(led_hut,OUTPUT);
 
   pinMode(trig_pin,OUTPUT);
   pinMode(echo_pin,INPUT);
