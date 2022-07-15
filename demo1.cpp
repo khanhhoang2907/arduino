@@ -21,7 +21,7 @@ int right_reverse=26;
 int left_down= 13;
 int left_reverse= 27;
 
-
+int led_hut =32;
 char d[50]={""};
 
 WiFiClient espClient;
@@ -200,12 +200,12 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
-  distanceCm = getDistance();
-  Serial.println(distanceCm);
+  //distanceCm = getDistance();
+  //Serial.println(distanceCm);
   char buffer[50];
 
   sprintf(buffer," %s ", d );
-  sprintf(d, "%d\n", distanceCm);
+  //sprintf(d, "%d\n", distanceCm);
   client.publish("21126072/out", buffer);
   
   delay(100);
