@@ -1,8 +1,8 @@
 #include<WiFi.h>
 #include "PubSubClient.h"
 
-const char* ssid = "Hoang Anh 5Ghz";
-const char* password = "88889999";
+const char* ssid = "Wokwi-GUEST";
+const char* password = "";
 const char* mqttServer = "test.mosquitto.org";
 int port = 1883;
 
@@ -11,10 +11,10 @@ int port = 1883;
 int trig_pin=25;
 int echo_pin=33;
 int distanceCm;
-int distannceR=0;
-int distanceL=0;
+                                                          // int distannceR=0;
+                                                          // int distanceL=0; intFunc2
 
-// dong co
+// dong c
 
 int right_down=12;
 int right_reverse=26;
@@ -22,8 +22,20 @@ int left_down= 13;
 int left_reverse= 27;
 
 int led_hut =32;
+
 char d[50]={""};
 
+
+long getDistance(){
+  digitalWrite(trig_pin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig_pin, HIGH);
+  delayMicroseconds(10); 
+  digitalWrite(trig_pin, LOW);
+  long duration = pulseIn(echo_pin,HIGH);
+  long distanceCm = duration*0.034/2;
+  return distanceCm;
+}
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -173,10 +185,10 @@ void callback(char* topic, byte* message, unsigned int length){
 void setup() {
   Serial.begin(9600);
   Serial.print("Connecting to WiFi");
-  pinMode(12,OUTPUT);
-  pinMode(2,OUTPUT);
-  pinMode(19,OUTPUT);
-  pinMode(5,OUTPUT);
+  pinMode(right_down,OUTPUT);
+  pinMode(right_reverse,OUTPUT);
+  pinMode(left_down,OUTPUT);
+  pinMode(left_reverse,OUTPUT);
 
   pinMode(trig_pin,OUTPUT);
   pinMode(echo_pin,INPUT);
@@ -200,12 +212,12 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
-  //distanceCm = getDistance();
-  //Serial.println(distanceCm);
+  distanceCm = getDistance();
+  Serial.println(distanceCm);
   char buffer[50];
 
-  sprintf(buffer," %s ", d );
-  //sprintf(d, "%d\n", distanceCm);
+  sprintf(buffer," %s ", d )
+  sprintf(d, "%d\n", distanceCm);
   client.publish("21126072/out", buffer);
   
   delay(100);

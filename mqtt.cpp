@@ -205,8 +205,9 @@ void loop(){
   //Serial.println(distanceCm);
   char buffer[50];
 
+ 
+  sprintf(d, "%d\n", distanceCm);
   sprintf(buffer," %s ", d );
-  //sprintf(d, "%d\n", distanceCm);
   client.publish("21126072/out", buffer);
   
   delay(100);
