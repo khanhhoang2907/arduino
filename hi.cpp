@@ -3,14 +3,14 @@
 
 
 
-const char* ssid = "Wokwi-GUEST";
-const char* password = "";
+const char* ssid = "Hoang Anh";
+const char* password = "88889999";
 
 const char* mqttServer = "broker.hivemq.com";
 const char *MqttId = "12345678";
 int port = 1883;
 char d[50];
-int LED =4;
+int LED =25;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
