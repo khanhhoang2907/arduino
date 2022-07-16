@@ -3,14 +3,29 @@
 
 
 
-const char* ssid = "Hoang Anh";
-const char* password = "88889999";
+const char* ssid = "Wokwi-GUEST";
+const char* password = "";
 
 const char* mqttServer = "broker.hivemq.com";
 const char *MqttId = "12345678";
 int port = 1883;
 char d[50];
-int LED =25;
+int LED =4;
+ int distanceCm;
+
+long getDistance(){
+  digitalWrite(trig_pin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig_pin, HIGH);
+  delayMicroseconds(10); 
+  digitalWrite(trig_pin, LOW);
+  long duration = pulseIn(echo_pin,HIGH);
+  long distanceCm = duration*0.034/2;
+  return distanceCm;
+}
+
+
+
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -92,12 +107,12 @@ void loop(){
   }
   client.loop();
   
+    distanceCm= getDistance();
+  char buffer[50];
  
-  // char buffer[50];
- 
-  // sprintf(d, "%d\n", distanceCm);
-  //  sprintf(buffer," %s ", d );
-  // client.publish("21126072/out", buffer);
+  sprintf(d, "%d\n", distanceCm);
+   sprintf(buffer," %s ", d );
+  client.publish("21126072/out", buffer);
   delay(1000);
   
 }
@@ -105,4 +120,4 @@ void loop(){
 
 //}test.mosquitto.org
 
-
+  
