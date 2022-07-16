@@ -10,7 +10,7 @@ const char* mqttServer = "broker.hivemq.com";
 const char *MqttId = "12345678";
 int port = 1883;
 char d[50];
-int LED =25;
+int LED =4;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -60,7 +60,7 @@ void callback(char* topic, byte* message, unsigned int length){
     digitalWrite(LED,LOW);
   }     
   else if(stMessage =="auto_on"){  
-    digitalWrite(LED,LOW);
+    digitalWrite(LED,HIGH);
   }     
   else if(stMessage =="auto_off"){  
     digitalWrite(LED,LOW);
