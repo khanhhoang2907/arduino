@@ -30,13 +30,13 @@ int left_reverse= 27;
 long getDistance();
 void wifiConnect();
 void mqttReconnect();
-void callback(char* topic, byte* message, unsigned int length);
-//
+
 void front();
 void left();
-void right():
+void right();
 void behind();
 void stop();
+
 //
 void b_front();
 void b_left();
@@ -44,7 +44,8 @@ void b_right();
 void b_behind();
 //
 //functions
-
+void callback(char* topic, byte* message, unsigned int length);
+//
 void setup() {
   Serial.begin(9600);
   Serial.print("Connecting to WiFi");
@@ -68,7 +69,7 @@ void loop(){
   }
   client.loop();
   
-    distanceCm= getDistance();
+  distanceCm= getDistance();
   char buffer[50];
  
   sprintf(d, "%d\n", distanceCm);
@@ -113,39 +114,6 @@ void mqttReconnect(){
   }
 }
 
-void callback(char* topic, byte* message, unsigned int length){
-  Serial.println(topic);
-  String stMessage;
-
-  for(int i = 0; i < length; i++){
-    stMessage += (char)message[i];}
-  Serial.println(stMessage);
-
-  if(stMessage =="clean_on"){  // búi hụt on
-    digitalWrite(clean,HIGH);
-  }
-  else if(stMessage =="clean_off"){ // búi hụt off
-    digitalWrite(clean,LOW);
-  }
-  else if(stMessage =="front"){   // front 
-        b_front();
-    }
-  else if(stMessage =="left"){  //left
-        b_left();
-    }
-  else if(stMessage =="right"){  //right
-        b_right();
-    }
-  else if(stMessage =="behind"){  // behind
-        b_behind(); 
-    }
-  else if(stMessage =="auto_on"){   // home
-
-    }
-    else if(stMessage =="auto_off"){ //   // end
-
-    }
-}
 
 //setting motor 
 
@@ -225,4 +193,37 @@ void stop(){
     digitalWrite(left_down,LOW);
     digitalWrite(left_reverse,LOW);
     delay(500);
+}
+void callback(char* topic, byte* message, unsigned int length){
+  Serial.println(topic);
+  String stMessage;
+
+  for(int i = 0; i < length; i++){
+    stMessage += (char)message[i];}
+  Serial.println(stMessage);
+
+  if(stMessage =="clean_on"){  // búi hụt on
+    digitalWrite(clean,HIGH);
+  }
+  else if(stMessage =="clean_off"){ // búi hụt off
+    digitalWrite(clean,LOW);
+  }
+  else if(stMessage =="front"){   // front 
+        b_front();
+    }
+  else if(stMessage =="left"){  //left
+        b_left();
+    }
+  else if(stMessage =="right"){  //right
+        b_right();
+    }
+  else if(stMessage =="behind"){  // behind
+        b_behind(); 
+    }
+  else if(stMessage =="auto_on"){   // home
+
+    }
+    else if(stMessage =="auto_off"){ //   // end
+
+    }
 }
