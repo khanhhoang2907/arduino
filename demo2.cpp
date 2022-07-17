@@ -9,7 +9,7 @@ const char* password = "88889999";
 const char* mqttServer = "broker.hivemq.com";
 const char *MqttId = "12345678";
 int port = 1883;
-
+bool Auto =0;
 WiFiClient espClient;
 PubSubClient client(espClient);
 const char *TopicSubscribe = "21126072/control";
@@ -90,6 +90,9 @@ void loop(){
   sprintf(d, "%d\n", distanceCm);
   sprintf(buffer," %s ", d );
   client.publish("21126072/out", buffer);
+  if(Auto ==1){
+    ai();
+  }
   delay(1000);
   
 }
@@ -283,10 +286,10 @@ void callback(char* topic, byte* message, unsigned int length){
         }
       
   else if(stMessage =="auto_off"){ //   // end
-      
+      Auto =0;
   }
   else if(stMessage =="auto_on"){   
-      ai();
+      Auto =1;
     }
 
 }

@@ -70,6 +70,9 @@ void setup() {
   pinMode(right_down, OUTPUT);
   pinMode(left_reverse, OUTPUT);
   pinMode(left_down, OUTPUT);
+   myservo.attach(32);
+
+  myservo.write(90);
 //pinMode
   client.setServer(mqttServer,port);
   client.setCallback(callback);
@@ -284,7 +287,7 @@ void callback(char* topic, byte* message, unsigned int length){
         }
       
   else if(stMessage =="auto_off"){ //   // end
-      AI=0;
+      A
 
   }
   else if(stMessage =="auto_on"){   
