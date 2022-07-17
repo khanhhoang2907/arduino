@@ -15,6 +15,8 @@ PubSubClient client(espClient);
 const char *TopicSubscribe = "21126072/control";
 
 int distanceCm;
+int distanceRight;
+int distanceLeft;
 char d[50];
 
 int trig_pin=25;
@@ -143,8 +145,9 @@ void b_left(){
         if(on_left==true){
             left();
         }
-        else
+        else{
             stop();
+        }
 }
 void b_right(){
   static bool on_right= 0;
@@ -152,8 +155,9 @@ void b_right(){
         if(on_right==true){
               right();
         }
-        else 
-        stop();  
+        else {
+        stop(); 
+        } 
 }
 void b_behind(){
   static bool on_behind= 0;
@@ -161,8 +165,9 @@ void b_behind(){
         if(on_behind==true){
             behind();
     }
-        else
+        else{
         stop();
+        }
     }
 
 
@@ -229,7 +234,7 @@ void ai(){
     }
     else if(distanceCm >40){
         front();
-        delay(5000);
+        
     }
 }
 
@@ -276,7 +281,7 @@ void callback(char* topic, byte* message, unsigned int length){
             b_behind(); 
         }
     }
-    else if(stMessage =="auto_on"){   // home
+  else if(stMessage =="auto_on"){   
       ai();
     }
 }
