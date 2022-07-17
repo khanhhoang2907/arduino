@@ -71,15 +71,7 @@ void callback(char* topic, byte* message, unsigned int length){
   if(stMessage =="clean_on"){  
     digitalWrite(LED,HIGH);
   }
-  else if(stMessage =="clean_off"){  
-    digitalWrite(LED,LOW);
-  }     
-  else if(stMessage =="auto_on"){  
-    digitalWrite(LED,HIGH);
-  }     
-  else if(stMessage =="auto_off"){  
-    digitalWrite(LED,LOW);
-  }     
+  
 }
 
 
@@ -117,7 +109,4 @@ void loop(){
   
 }
 
-
-//}test.mosquitto.org
-
-  
+ 
