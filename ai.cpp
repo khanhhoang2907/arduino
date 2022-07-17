@@ -58,20 +58,21 @@ void loop(){
 }
 
 void ai(){
-    front();
-    delay(2000);
     if(distanceCm<=40){
+        behind();
+        delay(30);
         stop();
-        delay(100);
-        behind();;
         delay(300);
+        lookRight();
+        lookLeft();
+        delay(100);
         if(distanceRight < distanceLeft){
             right();
             delay(300);
             stop();
             delay(100);
         }
-        else{
+        else if(distanceRight > distanceLeft){
             left();
             delay(300);
             stop();
@@ -86,14 +87,14 @@ void ai(){
 
 
 int lookRight(){
-    myservo.write(180);              // tell servo to go to position in variable 'pos'
+    myservo.write(180);              
     delay(1000);
     distanceRight= getDistance();
     myservo.write(90);
     return distanceRight;
 }
 int lookLeft(){
-    myservo.write(0);              // tell servo to go to position in variable 'pos'
+    myservo.write(0);             
     delay(1000);
     distanceLeft= getDistance();
     myservo.write(90);

@@ -47,6 +47,8 @@ void b_behind();
 //
 
 void ai();
+int lookRight();
+int lookLeft();
 //functions
 void callback(char* topic, byte* message, unsigned int length);
 //
@@ -81,7 +83,7 @@ void loop(){
   char buffer[50];
  
   sprintf(d, "%d\n", distanceCm);
-   sprintf(buffer," %s ", d );
+  sprintf(buffer," %s ", d );
   client.publish("21126072/out", buffer);
   delay(1000);
   
@@ -204,12 +206,46 @@ void stop(){
 
 
 void ai(){
-    if(distanceCm>=20){
-      front();
+   if(distanceCm<=40){
+        behind();
+        delay(30);
+        stop();
+        delay(300);
+        lookRight();
+        lookLeft();
+        delay(100);
+        if(distanceRight < distanceLeft){
+            right();
+            delay(300);
+            stop();
+            delay(100);
+        }
+        else if(distanceRight > distanceLeft){
+            left();
+            delay(300);
+            stop();
+            delay(100);
+        }
     }
-    else if(distanceCm<=20){
+    else if(distanceCm >40){
+        front();
+        delay(5000);
+    }
+}
 
-    }
+int lookRight(){
+    myservo.write(180);              
+    delay(1000);
+    distanceRight= getDistance();
+    myservo.write(90);
+    return distanceRight;
+}
+int lookLeft(){
+    myservo.write(0);             
+    delay(1000);
+    distanceLeft= getDistance();
+    myservo.write(90);
+    return distanceLeft;
 }
 void callback(char* topic, byte* message, unsigned int length){
   Serial.println(topic);
