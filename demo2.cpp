@@ -1,5 +1,7 @@
 #include<WiFi.h>
 #include "PubSubClient.h"
+#include <Servo.h>
+Servo myservo;
 
 const char* ssid = "Hoang Anh";
 const char* password = "88889999";
@@ -43,6 +45,8 @@ void b_left();
 void b_right();
 void b_behind();
 //
+
+void ai();
 //functions
 void callback(char* topic, byte* message, unsigned int length);
 //
@@ -197,6 +201,16 @@ void stop(){
     digitalWrite(left_reverse,LOW);
     delay(500);
 }
+
+
+void ai(){
+    if(distanceCm>=20){
+      front();
+    }
+    else if(distanceCm<=20){
+
+    }
+}
 void callback(char* topic, byte* message, unsigned int length){
   Serial.println(topic);
   String stMessage;
@@ -211,22 +225,22 @@ void callback(char* topic, byte* message, unsigned int length){
   else if(stMessage =="clean_off"){ // búi hụt off
     digitalWrite(clean,LOW);
   }
-  else if(stMessage =="front"){   // front 
+
+  else if(stMessage =="auto_off"){ //   // end
+      else if(stMessage =="front"){   // front 
         b_front();
+        }
+      else if(stMessage =="left"){  //left
+            b_left();
+        }
+      else if(stMessage =="right"){  //right
+            b_right();
+        }
+      else if(stMessage =="behind"){  // behind
+            b_behind(); 
+        }
     }
-  else if(stMessage =="left"){  //left
-        b_left();
-    }
-  else if(stMessage =="right"){  //right
-        b_right();
-    }
-  else if(stMessage =="behind"){  // behind
-        b_behind(); 
-    }
-  else if(stMessage =="auto_on"){   // home
-
-    }
-    else if(stMessage =="auto_off"){ //   // end
-
+    else if(stMessage =="auto_on"){   // home
+      ai();
     }
 }

@@ -7,7 +7,7 @@ Servo myservo;
 
 void setup() {
     Serial.begin(9600);
-    myservo.attach(25);
+    myservo.attach(32);
 }
 int lookRight()
 {
