@@ -60,29 +60,30 @@ void loop(){
 void ai(){
     front();
     delay(2000);
-    if(distanceCm>20){
-        front();
-        delay(2000);
-    }
-    else if(distanceCm<=20){
-        if(lookLeft()<=lookRight()){
-            stop();
-            delay(100);
-            behind();
-            delay(1000);
+    if(distanceCm<=40){
+        stop();
+        delay(100);
+        behind();;
+        delay(300);
+        if(distanceRight < distanceLeft){
             right();
-            delay(1000);
-        }
-        else if(lookLeft()>lookRight()){
+            delay(300);
             stop();
             delay(100);
-            behind();
-            delay(500);
+        }
+        else{
             left();
-            delay(1000);
+            delay(300);
+            stop();
+            delay(100);
+        }
+    }
+    else if(distanceCm >40){
+        front();
+        delay(5000);
     }
 }
-}
+
 
 int lookRight(){
     myservo.write(180);              // tell servo to go to position in variable 'pos'
