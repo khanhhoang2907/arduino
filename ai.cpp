@@ -68,17 +68,17 @@ void ai(){
         if(lookLeft()<=lookRight()){
             stop();
             delay(100);
+            behind();
+            delay(1000);
             right();
-            delay(500);
-            front();
             delay(1000);
         }
         else if(lookLeft()>lookRight()){
             stop();
             delay(100);
-            left();
+            behind();
             delay(500);
-            front();
+            left();
             delay(1000);
     }
 }
@@ -89,7 +89,7 @@ int lookRight(){
     delay(1000);
     distanceRight= getDistance();
     myservo.write(90);
-    return distanceRight
+    return distanceRight;
 }
 int lookLeft(){
     myservo.write(0);              // tell servo to go to position in variable 'pos'
