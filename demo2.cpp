@@ -55,8 +55,12 @@ void setup() {
 
 //pinMode
   pinMode(clean, OUTPUT); 
-
-
+  pinMode(trig_pin, OUTPUT);
+  pinMode(echo_pin, INPUT);
+  pinMode(right_reverse, OUTPUT);
+  pinMode(right_down, OUTPUT);
+  pinMode(left_reverse, OUTPUT);
+  pinMode(left_down, OUTPUT);
 //pinMode
   client.setServer(mqttServer,port);
   client.setCallback(callback);
