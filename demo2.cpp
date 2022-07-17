@@ -266,22 +266,24 @@ void callback(char* topic, byte* message, unsigned int length){
   else if(stMessage =="clean_off"){ // búi hụt off
     digitalWrite(clean,LOW);
   }
-
-  else if(stMessage =="auto_off"){ //   // end
-      else if(stMessage =="front"){   // front 
+  else if(stMessage =="front"){   // front 
         b_front();
         }
-      else if(stMessage =="left"){  //left
+  else if(stMessage =="left"){  //left
             b_left();
         }
-      else if(stMessage =="right"){  //right
+  else if(stMessage =="right"){  //right
             b_right();
         }
-      else if(stMessage =="behind"){  // behind
+  else if(stMessage =="behind"){  // behind
             b_behind(); 
         }
-    }
+      
+  else if(stMessage =="auto_off"){ //   // end
+      stop();
+  }
   else if(stMessage =="auto_on"){   
       ai();
     }
+
 }
