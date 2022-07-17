@@ -147,7 +147,6 @@ void b_right(){
 }
 void b_behind(){
   static bool on_behind= 0;
-    else if(stMessage =="behind"){  // behind
         on_behind=!on_behind;
         if(on_behind==true){
             behind();
@@ -155,7 +154,7 @@ void b_behind(){
         else
         stop();
     }
-}
+
 
 //
 void front(){
