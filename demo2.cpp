@@ -74,7 +74,7 @@ void setup() {
 
   pinMode(pir_pin, INPUT);
   pinMode(LED_blue, OUTPUT);
-   myservo.attach(32);
+   myservo.attach(33);
 
   myservo.write(90);
 //pinMode
@@ -227,12 +227,11 @@ void stop(){
 void ai(){
    if(Pir==0 || distanceCm <= 40){
         digitalWrite(LED_blue,HIGH);
-        stop();
-        delay(300);
+      
+      
         behind();
         delay(30);
-       
-        
+        stop();
         lookRight();
         lookLeft();
         delay(100);
@@ -285,7 +284,7 @@ void callback(char* topic, byte* message, unsigned int length){
     digitalWrite(clean,LOW);  
         }
   else if(stMessage =="front"){  
-            b_behind(); 
+            b_front(); 
         }
   else if(stMessage =="left"){  
       b_left(); 
@@ -299,6 +298,7 @@ void callback(char* topic, byte* message, unsigned int length){
       
   else if(stMessage =="auto_off"){ //   // end
       Auto =0;
+      stop();
   }
   else if(stMessage =="auto_on"){   
       Auto =1;
