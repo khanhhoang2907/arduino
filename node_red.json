@@ -1,0 +1,283 @@
+[
+    {
+        "id": "4eb1202776f90db8",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d2ba9dd2ba56c133",
+        "type": "ui_button",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "group": "724cbcc09e3ee04e",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Front",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "front",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 590,
+        "y": 260,
+        "wires": [
+            [
+                "16768ce4c3299db3"
+            ]
+        ]
+    },
+    {
+        "id": "b10f902f3a050e73",
+        "type": "ui_button",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "group": "724cbcc09e3ee04e",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Behind",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "behind",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 600,
+        "y": 440,
+        "wires": [
+            [
+                "16768ce4c3299db3"
+            ]
+        ]
+    },
+    {
+        "id": "d819f2ed6ec0a616",
+        "type": "ui_button",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "group": "724cbcc09e3ee04e",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Right",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "right",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 590,
+        "y": 380,
+        "wires": [
+            [
+                "16768ce4c3299db3"
+            ]
+        ]
+    },
+    {
+        "id": "57f65daccaa20cb6",
+        "type": "ui_button",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "group": "724cbcc09e3ee04e",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Left",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "left",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 590,
+        "y": 320,
+        "wires": [
+            [
+                "16768ce4c3299db3"
+            ]
+        ]
+    },
+    {
+        "id": "2d46f0873b9bc346",
+        "type": "ui_switch",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "label": "Clean",
+        "tooltip": "",
+        "group": "724cbcc09e3ee04e",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "clean_on",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "clean_off",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "x": 590,
+        "y": 140,
+        "wires": [
+            [
+                "16768ce4c3299db3"
+            ]
+        ]
+    },
+    {
+        "id": "16768ce4c3299db3",
+        "type": "mqtt out",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "topic": "21126072/control",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "3f7a1729f213ffc2",
+        "x": 1010,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "2ae85999b8db8c41",
+        "type": "mqtt in",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "topic": "21126072/out",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "3f7a1729f213ffc2",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 570,
+        "y": 540,
+        "wires": [
+            [
+                "b740d75033a56cb9"
+            ]
+        ]
+    },
+    {
+        "id": "b740d75033a56cb9",
+        "type": "ui_text",
+        "z": "4eb1202776f90db8",
+        "group": "724cbcc09e3ee04e",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Distance =",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 810,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "a7b2e012b814c9f2",
+        "type": "ui_switch",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "label": "Auto",
+        "tooltip": "",
+        "group": "724cbcc09e3ee04e",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "auto_on",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "auto_off",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "x": 590,
+        "y": 200,
+        "wires": [
+            [
+                "16768ce4c3299db3"
+            ]
+        ]
+    },
+    {
+        "id": "724cbcc09e3ee04e",
+        "type": "ui_group",
+        "name": "Duster",
+        "tab": "0743755a059662dd",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "3f7a1729f213ffc2",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "0743755a059662dd",
+        "type": "ui_tab",
+        "name": "Arduino",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]

@@ -13,27 +13,27 @@ bool Auto =0;
 WiFiClient espClient;
 PubSubClient client(espClient);
 const char *TopicSubscribe = "21126072/control";
-
+// khai báo các chân của thiết bị
 int distanceCm;
 int distanceRight;
 int distanceLeft;
 char d[50];
 
-int trig_pin=25;
-int echo_pin=33;
+int trig_pin=32;
+int echo_pin=35;
 
-int clean =34;
+int clean =34; // đọng cơ máy hút bụi 
 
 int right_down=12;
 int right_reverse=26;
 int left_down= 13;
 int left_reverse= 27;
-
+bool Pir;
 int pir_pin= 23;
 int LED_blue =19;
 //functions
 
-long getDistance();
+long getDistance();  // hàm đo khoảng csh của ultrasonic
 void wifiConnect();
 void mqttReconnect();
 
@@ -74,7 +74,7 @@ void setup() {
 
   pinMode(pir_pin, INPUT);
   pinMode(LED_blue, OUTPUT);
-   myservo.attach(32);
+   myservo.attach(33);
 
   myservo.write(90);
 //pinMode
@@ -88,7 +88,7 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
-  int Pir=digitalRead(pir_pin);
+  Pir=digitalRead(pir_pin);
   distanceCm= getDistance();
   char buffer[50];
  
@@ -98,10 +98,10 @@ void loop(){
   if(Auto ==1){
     ai();
   }
-  delay(100);
+  delay(5);
   
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////
  
 long getDistance(){
   digitalWrite(trig_pin, LOW);
@@ -225,11 +225,13 @@ void stop(){
 
 
 void ai(){
-   if(distanceCm<=40){
+   if(Pir==0 || distanceCm <= 40){
+        digitalWrite(LED_blue,HIGH);
+      
+      
         behind();
         delay(30);
         stop();
-        delay(300);
         lookRight();
         lookLeft();
         delay(100);
@@ -246,7 +248,8 @@ void ai(){
             delay(100);
         }
     }
-    else if(distanceCm >40){
+    else if(Pir==1 || distanceCm> 40){
+      digitalWrite(LED_blue,LOW);
         front();
         
     }
@@ -281,7 +284,7 @@ void callback(char* topic, byte* message, unsigned int length){
     digitalWrite(clean,LOW);  
         }
   else if(stMessage =="front"){  
-            b_behind(); 
+            b_front(); 
         }
   else if(stMessage =="left"){  
       b_left(); 
@@ -295,6 +298,7 @@ void callback(char* topic, byte* message, unsigned int length){
       
   else if(stMessage =="auto_off"){ //   // end
       Auto =0;
+      stop();
   }
   else if(stMessage =="auto_on"){   
       Auto =1;

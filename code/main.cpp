@@ -184,14 +184,11 @@ void b_behind(){
 
 //
 void front(){
-  
     digitalWrite(right_down,HIGH);
     digitalWrite(left_down,HIGH);
     digitalWrite(right_reverse,LOW);
     digitalWrite(left_reverse,LOW);
     delay(500);
-    
-    
 }
 void left(){
     digitalWrite(right_down,HIGH);
@@ -199,7 +196,6 @@ void left(){
     digitalWrite(left_down,LOW);
     digitalWrite(left_reverse,HIGH);
     delay(500);
-   
 }
 void right(){
     digitalWrite(right_reverse,HIGH);
@@ -222,13 +218,9 @@ void stop(){
     digitalWrite(left_reverse,LOW);
     delay(500);
 }
-
-
 void ai(){
    if(Pir==0 || distanceCm <= 40){
         digitalWrite(LED_blue,HIGH);
-      
-      
         behind();
         delay(30);
         stop();
@@ -277,10 +269,10 @@ void callback(char* topic, byte* message, unsigned int length){
     stMessage += (char)message[i];}
   Serial.println(stMessage);
 
-  if(stMessage =="clean_on"){  // búi hụt on
+  if(stMessage =="clean_on"){  
     digitalWrite(clean,HIGH);
   }
-  else if(stMessage =="clean_off"){ // búi hụt off
+  else if(stMessage =="clean_off"){ 
     digitalWrite(clean,LOW);  
         }
   else if(stMessage =="front"){  
@@ -295,8 +287,7 @@ void callback(char* topic, byte* message, unsigned int length){
   else if(stMessage =="behind"){  
             b_behind(); 
         }
-      
-  else if(stMessage =="auto_off"){ //   // end
+  else if(stMessage =="auto_off"){ 
       Auto =0;
       stop();
   }
