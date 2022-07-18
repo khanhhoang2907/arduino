@@ -287,7 +287,7 @@ void callback(char* topic, byte* message, unsigned int length){
         }
       
   else if(stMessage =="auto_off"){ //   // end
-      A
+      AI=0;
 
   }
   else if(stMessage =="auto_on"){   
