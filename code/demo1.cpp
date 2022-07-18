@@ -22,17 +22,17 @@ char d[50];
 int trig_pin=32;
 int echo_pin=35;
 
-int clean =34; // đọng cơ máy hút bụi 
+int clean =34; // đọong cơ máy hút bụi 
 
-int right_down=12;
-int right_reverse=26;
-int left_down= 13;
-int left_reverse= 27;
-bool Pir;
-int pir_pin= 23;
-int LED_blue =19;
-//functions
+int right_down=12;  // khi chân này high thì bánh bên  TRÁI đi TIẾN
+int right_reverse=26;  // khi chân này high thì bánh bên TRÁI đi LÙI
+int left_down= 13;    // khi chân này high thì bánh bên PHẢI  TIẾN
+int left_reverse= 27;   // khi chân này high thì bánh bên PHẢI LÙI
+bool Pir;      //  biến này dùng để  nhận giá trị của cảm biến hồng ngoại , 1 là có vật 0 là không có vật 
+int pir_pin= 23;  //    chân của ultrasonic
+int LED_blue =19;    // cái này giống cái trên
 
+//f
 long getDistance();  // hàm đo khoảng csh của ultrasonic
 void wifiConnect();
 void mqttReconnect();
@@ -51,15 +51,16 @@ void b_behind();
 //
 
 void ai();
-int lookRight();
+int lookRight(); 
 int lookLeft();
 //functions
-void callback(char* topic, byte* message, unsigned int length);
+void callback(char* topic, byte* message, unsigned int length);  // hàm call back nhận giá trị từ node red
+
 //
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(9600);            
   Serial.print("Connecting to WiFi");
-  wifiConnect();
+  wifiConnect();         
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
@@ -71,15 +72,14 @@ void setup() {
   pinMode(right_down, OUTPUT);
   pinMode(left_reverse, OUTPUT);
   pinMode(left_down, OUTPUT);
-
   pinMode(pir_pin, INPUT);
   pinMode(LED_blue, OUTPUT);
-   myservo.attach(33);
+  myservo.attach(33);  // khai báo chân servo 
 
-  myservo.write(90);
+  myservo.write(90);    // servo đang ở góc 90 độ
 //pinMode
-  client.setServer(mqttServer,port);
-  client.setCallback(callback);
+  client.setServer(mqttServer,port); // kết nối node red và port trên mạch
+  client.setCallback(callback);  // gọi hàm callback
 }
 
 void loop(){
@@ -88,14 +88,17 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
+
   Pir=digitalRead(pir_pin);
   distanceCm= getDistance();
   char buffer[50];
  
-  sprintf(d, "%d\n", distanceCm);
-  sprintf(buffer," %s ", d );
-  client.publish("21126072/out", buffer);
-  if(Auto ==1){
+  sprintf(d, "%d\n", distanceCm);// chuyển giá trị từ số sang chuỗi ở mảng d
+  sprintf(buffer," %s ", d );    // sao chép chuỗi từ mảng d sang buffer
+  client.publish("21126072/out", buffer);   // gửi giá trị từ buffer nên node red 
+
+
+  if(Auto ==1){      // cái này tí xuống hàm callback giải thích rõ hơn 
     ai();
   }
   delay(5);
@@ -103,7 +106,7 @@ void loop(){
 }
 /////////
  
-long getDistance(){
+long getDistance(){    // đo khoảng cách trả về biến distanceCm
   digitalWrite(trig_pin, LOW);
   delayMicroseconds(2);
   digitalWrite(trig_pin, HIGH);
@@ -111,10 +114,10 @@ long getDistance(){
   digitalWrite(trig_pin, LOW);
   long duration = pulseIn(echo_pin,HIGH);
   long distanceCm = duration*0.034/2;
-  return distanceCm;
+  return distanceCm;  
 }
 
-void wifiConnect(){
+void wifiConnect(){    // hàm này vớ vẩn không cần quan tâm
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED){
     delay(500);
@@ -123,7 +126,7 @@ void wifiConnect(){
   Serial.println("Connected!");
 }
 
-void mqttReconnect(){
+void mqttReconnect(){   // hàm này cũng vậy 
   while(!client.connected()){
     Serial.print("Attempting MQTT connection...");
     if(client.connect(MqttId)){
@@ -138,9 +141,45 @@ void mqttReconnect(){
 }
 
 
-//setting motor 
+//
+void front(){     // hàm đi tiến 
+    digitalWrite(right_down,HIGH);
+    digitalWrite(left_down,HIGH);
+    digitalWrite(right_reverse,LOW);
+    digitalWrite(left_reverse,LOW);
+    delay(500);
+}
+void left(){     // này đi sang phải 
+    digitalWrite(right_down,HIGH);
+    digitalWrite(right_reverse,LOW);
+    digitalWrite(left_down,LOW);
+    digitalWrite(left_reverse,HIGH);
+    delay(500);
+}
+void right(){    // hàm này mới là đi sang phải nè cái cơ nãy là sang trái nhìn tên tiếng anh đi 
+    digitalWrite(right_reverse,HIGH);
+    digitalWrite(left_down,HIGH);
+    digitalWrite(left_reverse,LOW);
+    digitalWrite(right_down,LOW);
+    delay (500);
+}
+void behind(){  // tự biết 
+    digitalWrite(right_reverse,HIGH);
+    digitalWrite(left_reverse,HIGH);
+    digitalWrite(right_down,LOW);
+    digitalWrite(left_down,LOW);
+    delay(500);
+}
+void stop(){     // chứng minh tương tự 
+    digitalWrite(right_down,LOW);
+    digitalWrite(right_reverse,LOW);
+    digitalWrite(left_down,LOW);
+    digitalWrite(left_reverse,LOW);
+    delay(500);
+} 
 
-void b_front(){
+/////
+void b_front(){   //   
     static bool on_front= 0;
     on_front=!on_front;
         if(on_front==true){
@@ -180,55 +219,9 @@ void b_behind(){
         stop();
         }
     }
-
-
-//
-void front(){
-  
-    digitalWrite(right_down,HIGH);
-    digitalWrite(left_down,HIGH);
-    digitalWrite(right_reverse,LOW);
-    digitalWrite(left_reverse,LOW);
-    delay(500);
-    
-    
-}
-void left(){
-    digitalWrite(right_down,HIGH);
-    digitalWrite(right_reverse,LOW);
-    digitalWrite(left_down,LOW);
-    digitalWrite(left_reverse,HIGH);
-    delay(500);
-   
-}
-void right(){
-    digitalWrite(right_reverse,HIGH);
-    digitalWrite(left_down,HIGH);
-    digitalWrite(left_reverse,LOW);
-    digitalWrite(right_down,LOW);
-    delay (500);
-}
-void behind(){
-    digitalWrite(right_reverse,HIGH);
-    digitalWrite(left_reverse,HIGH);
-    digitalWrite(right_down,LOW);
-    digitalWrite(left_down,LOW);
-    delay(500);
-}
-void stop(){
-    digitalWrite(right_down,LOW);
-    digitalWrite(right_reverse,LOW);
-    digitalWrite(left_down,LOW);
-    digitalWrite(left_reverse,LOW);
-    delay(500);
-}
-
-
 void ai(){
-   if(Pir==0 || distanceCm <= 40){
+   if(Pir==0 || distanceCm <= 40){  // khi khoảng cách nhở hơn 40 cm hoặc đèn  trên cảm biến hồng ngoại sáng  thì sẽ dừng kại nhìn hai bên, bên nào gần hơn thì chạy qua bên đó
         digitalWrite(LED_blue,HIGH);
-      
-      
         behind();
         delay(30);
         stop();
@@ -248,21 +241,21 @@ void ai(){
             delay(100);
         }
     }
-    else if(Pir==1 || distanceCm> 40){
+    else if(Pir==1 || distanceCm> 40){ // nếu khồn có gì xảy ra chứ chạy thẳng
       digitalWrite(LED_blue,LOW);
         front();
         
     }
 }
 
-int lookRight(){
+int lookRight(){     // hàm nhìn bên phải 
     myservo.write(180);              
     delay(1000);
     distanceRight= getDistance();
     myservo.write(90);
     return distanceRight;
 }
-int lookLeft(){
+int lookLeft(){    // nhìn bên trái 
     myservo.write(0);             
     delay(1000);
     distanceLeft= getDistance();
@@ -275,7 +268,7 @@ void callback(char* topic, byte* message, unsigned int length){
 
   for(int i = 0; i < length; i++){
     stMessage += (char)message[i];}
-  Serial.println(stMessage);
+  Serial.println(stMessage);   // stMessage là giá trị trả về từ node red ui 
 
   if(stMessage =="clean_on"){  // búi hụt on
     digitalWrite(clean,HIGH);
