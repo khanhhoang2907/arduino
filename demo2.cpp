@@ -283,9 +283,17 @@ void callback(char* topic, byte* message, unsigned int length){
   }
   else if(stMessage =="clean_off"){ // búi hụt off
     digitalWrite(clean,LOW);  t
-            b_right();
         }
-  else if(stMessage =="behind"){  // behind
+  else if(stMessage =="front"){  
+            b_behind(); 
+        }
+  else if(stMessage =="left"){  
+      b_left(); 
+  }
+  else if(stMessage =="right"){  
+            b_right(); 
+        }
+  else if(stMessage =="behind"){  
             b_behind(); 
         }
       
