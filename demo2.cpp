@@ -28,7 +28,7 @@ int right_down=12;
 int right_reverse=26;
 int left_down= 13;
 int left_reverse= 27;
-
+bool Pir;
 int pir_pin= 23;
 int LED_blue =19;
 //functions
@@ -88,7 +88,7 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
-  int Pir=digitalRead(pir_pin);
+  Pir=digitalRead(pir_pin);
   distanceCm= getDistance();
   char buffer[50];
  
@@ -98,7 +98,7 @@ void loop(){
   if(Auto ==1){
     ai();
   }
-  delay(1000);
+  delay(100);
   
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,17 +184,13 @@ void b_behind(){
 
 //
 void front(){
+  
     digitalWrite(right_down,HIGH);
     digitalWrite(left_down,HIGH);
     digitalWrite(right_reverse,LOW);
     digitalWrite(left_reverse,LOW);
     delay(500);
-    if(Pir==0){
-      stop();
-    }
-    else{
-      front();
-       }
+    
     
 }
 void left(){
@@ -229,7 +225,7 @@ void stop(){
 
 
 void ai(){
-   if(distanceCm<=40){
+   if(Pir==0){
         behind();
         delay(30);
         stop();
@@ -250,7 +246,7 @@ void ai(){
             delay(100);
         }
     }
-    else if(distanceCm >40){
+    else if(Pir==1){
         front();
         
     }

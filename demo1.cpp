@@ -9,12 +9,11 @@ const char* password = "88889999";
 const char* mqttServer = "broker.hivemq.com";
 const char *MqttId = "12345678";
 int port = 1883;
-
+bool Auto =0;
 WiFiClient espClient;
 PubSubClient client(espClient);
 const char *TopicSubscribe = "21126072/control";
 
-bool AI=0;
 int distanceCm;
 int distanceRight;
 int distanceLeft;
@@ -23,13 +22,15 @@ char d[50];
 int trig_pin=25;
 int echo_pin=33;
 
-int clean =4;
+int clean =34;
 
 int right_down=12;
 int right_reverse=26;
 int left_down= 13;
 int left_reverse= 27;
 
+int pir_pin= 23;
+int LED_blue =19;
 //functions
 
 long getDistance();
@@ -70,6 +71,9 @@ void setup() {
   pinMode(right_down, OUTPUT);
   pinMode(left_reverse, OUTPUT);
   pinMode(left_down, OUTPUT);
+
+  pinMode(pir_pin, INPUT);
+  pinMode(LED_blue, OUTPUT);
    myservo.attach(32);
 
   myservo.write(90);
@@ -84,16 +88,17 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
-  if(AI==1){
-    ai();
-  }
-  
+  int Pir=digitalRead(pir_pin);
   distanceCm= getDistance();
   char buffer[50];
+ 
   sprintf(d, "%d\n", distanceCm);
   sprintf(buffer," %s ", d );
   client.publish("21126072/out", buffer);
-  delay(1000);
+  if(Auto ==1){
+    ai();
+  }
+  delay(100);
   
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,11 +184,14 @@ void b_behind(){
 
 //
 void front(){
+  
     digitalWrite(right_down,HIGH);
     digitalWrite(left_down,HIGH);
     digitalWrite(right_reverse,LOW);
     digitalWrite(left_reverse,LOW);
     delay(500);
+    
+    
 }
 void left(){
     digitalWrite(right_down,HIGH);
@@ -240,7 +248,6 @@ void ai(){
     }
     else if(distanceCm >40){
         front();
-        delay(5000);
         
     }
 }
@@ -271,27 +278,26 @@ void callback(char* topic, byte* message, unsigned int length){
     digitalWrite(clean,HIGH);
   }
   else if(stMessage =="clean_off"){ // búi hụt off
-    digitalWrite(clean,LOW);
+    digitalWrite(clean,LOW);  
+        }
+  else if(stMessage =="front"){  
+            b_behind(); 
+        }
+  else if(stMessage =="left"){  
+      b_left(); 
   }
-  else if(stMessage =="front"){   // front 
-        b_front();
+  else if(stMessage =="right"){  
+            b_right(); 
         }
-  else if(stMessage =="left"){  //left
-            b_left();
-        }
-  else if(stMessage =="right"){  //right
-            b_right();
-        }
-  else if(stMessage =="behind"){  // behind
+  else if(stMessage =="behind"){  
             b_behind(); 
         }
       
   else if(stMessage =="auto_off"){ //   // end
-      AI=0;
-
+      Auto =0;
   }
   else if(stMessage =="auto_on"){   
-      AI=1;
+      Auto =1;
     }
 
 }
