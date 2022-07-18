@@ -22,13 +22,15 @@ char d[50];
 int trig_pin=25;
 int echo_pin=33;
 
-int clean =4;
+int clean =34;
 
 int right_down=12;
 int right_reverse=26;
 int left_down= 13;
 int left_reverse= 27;
 
+int pir_pin= 23;
+int LED_blue =19;
 //functions
 
 long getDistance();
@@ -69,6 +71,9 @@ void setup() {
   pinMode(right_down, OUTPUT);
   pinMode(left_reverse, OUTPUT);
   pinMode(left_down, OUTPUT);
+
+  pinMode(pir_pin, INPUT);
+  pinMode(LED_blue, OUTPUT);
    myservo.attach(32);
 
   myservo.write(90);
@@ -83,7 +88,7 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
-  
+  int Pir=digitalRead(pir_pin);
   distanceCm= getDistance();
   char buffer[50];
  
@@ -184,6 +189,13 @@ void front(){
     digitalWrite(right_reverse,LOW);
     digitalWrite(left_reverse,LOW);
     delay(500);
+    if(Pir==0){
+      stop();
+    }
+    else{
+      front();
+       }
+    
 }
 void left(){
     digitalWrite(right_down,HIGH);
@@ -270,15 +282,7 @@ void callback(char* topic, byte* message, unsigned int length){
     digitalWrite(clean,HIGH);
   }
   else if(stMessage =="clean_off"){ // búi hụt off
-    digitalWrite(clean,LOW);
-  }
-  else if(stMessage =="front"){   // front 
-        b_front();
-        }
-  else if(stMessage =="left"){  //left
-            b_left();
-        }
-  else if(stMessage =="right"){  //right
+    digitalWrite(clean,LOW);  t
             b_right();
         }
   else if(stMessage =="behind"){  // behind
