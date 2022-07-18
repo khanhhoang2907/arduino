@@ -98,7 +98,7 @@ void loop(){
   if(Auto ==1){
     ai();
   }
-  delay(100);
+  delay(5);
   
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,11 +225,14 @@ void stop(){
 
 
 void ai(){
-   if(Pir==0){
-        behind();
-        delay(30);
+   if(Pir==0 || distanceCm <= 40){
+        digitalWrite(LED_blue,HIGH);
         stop();
         delay(300);
+        behind();
+        delay(30);
+       
+        
         lookRight();
         lookLeft();
         delay(100);
@@ -246,7 +249,8 @@ void ai(){
             delay(100);
         }
     }
-    else if(Pir==1){
+    else if(Pir==1 || distanceCm> 40){
+      digitalWrite(LED_blue,LOW);
         front();
         
     }
