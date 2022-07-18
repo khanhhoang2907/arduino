@@ -19,10 +19,10 @@ int distanceRight;
 int distanceLeft;
 char d[50];
 
-int trig_pin=25;
-int echo_pin=33;
+int trig_pin=35;
+int echo_pin=34;
 
-int clean =34;
+int clean =5;
 
 int right_down=12;
 int right_reverse=26;
