@@ -26,8 +26,8 @@
         "payloadType": "str",
         "topic": "topic",
         "topicType": "msg",
-        "x": 590,
-        "y": 260,
+        "x": 490,
+        "y": 300,
         "wires": [
             [
                 "16768ce4c3299db3"
@@ -53,8 +53,8 @@
         "payloadType": "str",
         "topic": "topic",
         "topicType": "msg",
-        "x": 600,
-        "y": 440,
+        "x": 500,
+        "y": 480,
         "wires": [
             [
                 "16768ce4c3299db3"
@@ -80,8 +80,8 @@
         "payloadType": "str",
         "topic": "topic",
         "topicType": "msg",
-        "x": 590,
-        "y": 380,
+        "x": 490,
+        "y": 420,
         "wires": [
             [
                 "16768ce4c3299db3"
@@ -107,8 +107,8 @@
         "payloadType": "str",
         "topic": "topic",
         "topicType": "msg",
-        "x": 590,
-        "y": 320,
+        "x": 490,
+        "y": 360,
         "wires": [
             [
                 "16768ce4c3299db3"
@@ -140,8 +140,8 @@
         "officon": "",
         "offcolor": "",
         "animate": false,
-        "x": 590,
-        "y": 140,
+        "x": 490,
+        "y": 180,
         "wires": [
             [
                 "16768ce4c3299db3"
@@ -162,7 +162,7 @@
         "correl": "",
         "expiry": "",
         "broker": "3f7a1729f213ffc2",
-        "x": 1010,
+        "x": 1130,
         "y": 300,
         "wires": []
     },
@@ -179,11 +179,12 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 570,
-        "y": 540,
+        "x": 450,
+        "y": 660,
         "wires": [
             [
-                "b740d75033a56cb9"
+                "b740d75033a56cb9",
+                "8ee4347911b1d28e"
             ]
         ]
     },
@@ -199,8 +200,8 @@
         "label": "Distance =",
         "format": "{{msg.payload}}",
         "layout": "row-center",
-        "x": 810,
-        "y": 540,
+        "x": 690,
+        "y": 660,
         "wires": []
     },
     {
@@ -228,11 +229,107 @@
         "officon": "",
         "offcolor": "",
         "animate": true,
-        "x": 590,
-        "y": 200,
+        "x": 490,
+        "y": 240,
         "wires": [
             [
                 "16768ce4c3299db3"
+            ]
+        ]
+    },
+    {
+        "id": "f9eb68f222744fec",
+        "type": "ui_slider",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "label": "Clean Control",
+        "tooltip": "",
+        "group": "724cbcc09e3ee04e",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "300",
+        "step": 1,
+        "x": 580,
+        "y": 120,
+        "wires": [
+            [
+                "16768ce4c3299db3"
+            ]
+        ]
+    },
+    {
+        "id": "11dcfbe9f97e1005",
+        "type": "http request",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://maker.ifttt.com/trigger/Duster/with/key/cDovp4aBsmNzzYh2rRyAaJa-AFLAmjmR8iPSBZIyeyn ",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 1010,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8ee4347911b1d28e",
+        "type": "switch",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lte",
+                "v": "50",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 730,
+        "y": 480,
+        "wires": [
+            [
+                "11dcfbe9f97e1005"
+            ]
+        ]
+    },
+    {
+        "id": "fd43190622bebf49",
+        "type": "inject",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "40",
+        "payloadType": "num",
+        "x": 410,
+        "y": 540,
+        "wires": [
+            [
+                "8ee4347911b1d28e"
             ]
         ]
     },
