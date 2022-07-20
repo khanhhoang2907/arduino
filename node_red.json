@@ -171,7 +171,7 @@
         "type": "mqtt in",
         "z": "4eb1202776f90db8",
         "name": "",
-        "topic": "21126072/out",
+        "topic": "21126072/outdistance",
         "qos": "2",
         "datatype": "auto",
         "broker": "3f7a1729f213ffc2",
@@ -179,8 +179,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 450,
-        "y": 660,
+        "x": 460,
+        "y": 680,
         "wires": [
             [
                 "b740d75033a56cb9",
@@ -200,8 +200,8 @@
         "label": "Distance =",
         "format": "{{msg.payload}}",
         "layout": "row-center",
-        "x": 690,
-        "y": 660,
+        "x": 750,
+        "y": 620,
         "wires": []
     },
     {
@@ -267,7 +267,7 @@
         "id": "11dcfbe9f97e1005",
         "type": "http request",
         "z": "4eb1202776f90db8",
-        "name": "",
+        "name": "distance",
         "method": "GET",
         "ret": "obj",
         "paytoqs": "ignore",
@@ -277,8 +277,8 @@
         "proxy": "",
         "authType": "",
         "senderr": false,
-        "x": 1010,
-        "y": 480,
+        "x": 1020,
+        "y": 680,
         "wires": [
             []
         ]
@@ -293,7 +293,7 @@
         "rules": [
             {
                 "t": "lte",
-                "v": "50",
+                "v": "10",
                 "vt": "num"
             }
         ],
@@ -301,7 +301,7 @@
         "repair": false,
         "outputs": 1,
         "x": 730,
-        "y": 480,
+        "y": 680,
         "wires": [
             [
                 "11dcfbe9f97e1005"
@@ -323,15 +323,123 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "40",
+        "payload": "34",
         "payloadType": "num",
-        "x": 410,
-        "y": 540,
+        "x": 450,
+        "y": 580,
         "wires": [
             [
                 "8ee4347911b1d28e"
             ]
         ]
+    },
+    {
+        "id": "cbed78e4cb818c1b",
+        "type": "mqtt in",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "topic": "21126072/outfire",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "3f7a1729f213ffc2",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 460,
+        "y": 800,
+        "wires": [
+            [
+                "15fa122e86bf0b54",
+                "945bae701a588172"
+            ]
+        ]
+    },
+    {
+        "id": "15fa122e86bf0b54",
+        "type": "switch",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 730,
+        "y": 800,
+        "wires": [
+            [
+                "b2368b87b2900bd3"
+            ]
+        ]
+    },
+    {
+        "id": "b2368b87b2900bd3",
+        "type": "http request",
+        "z": "4eb1202776f90db8",
+        "name": "free fire",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://maker.ifttt.com/trigger/Gorr/with/key/cDovp4aBsmNzzYh2rRyAaJa-AFLAmjmR8iPSBZIyeyn ",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 1020,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eb6735c7d00b0e75",
+        "type": "inject",
+        "z": "4eb1202776f90db8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 450,
+        "y": 920,
+        "wires": [
+            [
+                "15fa122e86bf0b54"
+            ]
+        ]
+    },
+    {
+        "id": "945bae701a588172",
+        "type": "ui_text",
+        "z": "4eb1202776f90db8",
+        "group": "724cbcc09e3ee04e",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Free fire =",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 730,
+        "y": 940,
+        "wires": []
     },
     {
         "id": "724cbcc09e3ee04e",
