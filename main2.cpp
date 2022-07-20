@@ -11,6 +11,10 @@ const char* mqttServer = "broker.hivemq.com";
 const char *MqttId = "12345678";
 int port = 1883;
 bool Auto =0;
+bool value_pbot;
+bool value_pright;
+bool value_pleft;
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 const char *TopicSubscribe = "21126072/control";
@@ -31,9 +35,8 @@ int right_reverse=26;
 int left_down= 13;
 int left_reverse= 27;
 
- bool value_pbot;
- bool  value_pright;
-bool value_pleft;
+
+
 int pir_bot= 22 ;   
 int pir_right= 15 ;
 int pir_left= 23;   
@@ -41,10 +44,10 @@ int pir_left= 23;
 int led_behind=14;
 int led_left=19;   
 int led_right=18;
+bool value_fire; // cam bien lua
 
-int fire= 5 ; bool value_fire; // cam bien lua
+int fire= 5 ; 
 //functions
-
 long getDistance();
 void wifiConnect();
 void mqttReconnect();
@@ -66,8 +69,8 @@ void ai();
 int lookRight();
 int lookLeft();
 
-void warning_fire();
-void thor();
+void warning_fire();///
+void thor();///
 //functions
 void callback(char* topic, byte* message, unsigned int length);
 //
@@ -273,7 +276,7 @@ void ai(){
             delay(100);
         }
     }
-    else if(distanceCm > 40 ||pir_left==1||pir_right==1||pir_bot==0){
+    else{
         front();
         
     }
