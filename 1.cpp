@@ -30,7 +30,7 @@ void loop(){
     if(Pirbot=1){
         digialWrite(led_behind,HIGH);
         delay(5000);
-    }
+    }  
     else if(Pirright=1){
         digitalWrite(led_front_left,HIGH);
         delay(5000);

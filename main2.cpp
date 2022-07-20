@@ -18,7 +18,8 @@ const char *TopicSubscribe = "21126072/control";
 int distanceCm;
 int distanceRight;
 int distanceLeft;
-char d[50];
+char d[20];
+char f[20];
 
 int trig_pin=32;
 int echo_pin=35;
@@ -29,17 +30,16 @@ int right_down=12;
 int right_reverse=26;
 int left_down= 13;
 int left_reverse= 27;
-bool Pir;
 
-int pir_pin_bot= 22;
-int pir_pin_right= 15;
-int pir_pin_left= 23;
+int pir_bot= 22 ;   bool value_pbot;
+int pir_right= 15 ; bool  value_pright;
+int pir_left= 23;   bool value_pleft;
 
+int led_behind=14;
+int led_left=19;   
+int led_right=18;
 
-
-int led_behind=24;
-int led_front_left=21     ;
-int led_front_right=18;
+int fire= 5 ; bool value_fire; // cam bien lua
 //functions
 
 long getDistance();
@@ -62,6 +62,9 @@ void b_behind();
 void ai();
 int lookRight();
 int lookLeft();
+
+void warning_fire();
+void thor();
 //functions
 void callback(char* topic, byte* message, unsigned int length);
 //
@@ -80,11 +83,15 @@ void setup() {
   pinMode(right_down, OUTPUT);
   pinMode(left_reverse, OUTPUT);
   pinMode(left_down, OUTPUT);
-
-  pinMode(pir_pin_bot, INPUT);
-  pinMode(LED_blue, OUTPUT);
-   myservo.attach(33);
-
+// PIR
+    pinMode(pir_bot,INPUT);
+    pinMode(pir_right, INPUT);
+    pinMode(pir_left, INPUT);
+// LED
+  pinMode(led_behind, OUTPUT);
+  pinMode(led_right, OUTPUT);
+  pinMode(led_left, OUTPUT);
+  myservo.attach(33);
   myservo.write(90);
 //pinMode
   client.setServer(mqttServer,port);
@@ -97,17 +104,28 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
-  Pir=digitalRead(pir_pin_bot);
+  value_pbot=digitalRead(pir_bot);
+  value_pleft=digitalRead(pir_left);
+  value_pright=digitalRead(pir_right);
+  value_fire=digitalRead(fire);
+  if(value_fire == 0){
+    warning_fire();
+  }
   distanceCm= getDistance();
-  char buffer[50];
+  char buffer[20];
  
   sprintf(d, "%d\n", distanceCm);
   sprintf(buffer," %s ", d );
-  client.publish("21126072/out", buffer);
+  client.publish("21126072/outdistance", buffer);
+
+  sprintf(f, "%d\n", value_fire);
+  sprintf(buffer," %s ", f );
+  client.publish("21126072/outfire", buffer);
+
   if(Auto ==1){
     ai();
   }
-  delay(5);
+  delay(1);
   
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,6 +237,12 @@ void behind(){
     digitalWrite(right_down,LOW);
     digitalWrite(left_down,LOW);
     delay(500);
+    digitalWrite(left_down,HIGH);
+    delay(200);
+    digitalWrite(left_down,LOW);
+    delay(200);
+    digitalWrite(left_down,HIGH);
+    delay(200);
 }
 void stop(){
     digitalWrite(right_down,LOW);
@@ -228,7 +252,7 @@ void stop(){
     delay(500);
 }
 void ai(){
-   if(Pir==0 || distanceCm <= 40){
+   if(distanceCm <= 40 ||pir_left==0||pir_right==0||pir_bot==1){
         digitalWrite(LED_blue,HIGH);
         behind();
         delay(30);
@@ -249,8 +273,7 @@ void ai(){
             delay(100);
         }
     }
-    else if(Pir==1 || distanceCm> 40){
-      digitalWrite(LED_blue,LOW);
+    else if(distanceCm > 40 ||pir_left==1||pir_right==1||pir_bot==0){
         front();
         
     }
@@ -261,6 +284,8 @@ int lookRight(){
     delay(1000);
     distanceRight= getDistance();
     myservo.write(90);
+    digitalWrite(led_right,HIGH);
+    digitalWrite(led_left,LOW);
     return distanceRight;
 }
 int lookLeft(){
@@ -268,7 +293,32 @@ int lookLeft(){
     delay(1000);
     distanceLeft= getDistance();
     myservo.write(90);
+    digitalWrite(led_right,LOW);
+    digitalWrite(led_left,HIGH);
     return distanceLeft;
+}
+void warning_fire(){
+  digitalWrite(led_behind,LOW);
+  delay(350);
+  digitalWrite(led_behind,HIGH);
+  delay(350);
+  dgiatalWrite(led_behind,LOW);
+  delay(350);
+}
+void thor(){
+  for(int i=0;i<20;i++){
+      if(i%2==1){
+          digitalWrite(led_right,HIGH);
+          digitalWrite(led_left,LOW);
+          delay(60);
+      }
+      else if(i%2==0){
+        digitalWrite(led_right,LOW);
+        digitalWrite(led_left,HIGH);
+        delay(60);
+
+      }
+  }
 }
 void callback(char* topic, byte* message, unsigned int length){
   Serial.println(topic);
@@ -284,6 +334,14 @@ void callback(char* topic, byte* message, unsigned int length){
   else if(stMessage =="clean_off"){ 
     digitalWrite(clean,LOW);  
         }
+  else if(stMessage =="led_on"){
+      digitalWrite(led_left,HIGH);
+      digitalWrite(led_right,HIGH);
+  }
+  else if(stMessage =="led_off"){
+      digitalWrite(led_left,LOW);
+      digitalWrite(led_right,LOW);
+  }
   else if(stMessage =="front"){  
             b_front(); 
         }
