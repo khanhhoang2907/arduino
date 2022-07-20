@@ -113,14 +113,15 @@ void loop(){
   }
   distanceCm= getDistance();
   char buffer[20];
+  char buffer2[20];
  
   sprintf(d, "%d\n", distanceCm);
   sprintf(buffer," %s ", d );
   client.publish("21126072/outdistance", buffer);
 
   sprintf(f, "%d\n", value_fire);
-  sprintf(buffer," %s ", f );
-  client.publish("21126072/outfire", buffer);
+  sprintf(buffer2," %s ", f );
+  client.publish("21126072/outfire", buffer2);
 
   if(Auto ==1){
     ai();
@@ -162,11 +163,8 @@ void mqttReconnect(){
       delay(1000);
     }
   }
-}
-
-
+}    
 //setting motor 
-
 void b_front(){
     static bool on_front= 0;
     on_front=!on_front;
@@ -253,7 +251,7 @@ void stop(){
 }
 void ai(){
    if(distanceCm <= 40 ||pir_left==0||pir_right==0||pir_bot==1){
-        digitalWrite(LED_blue,HIGH);
+        digitalWrite(led_behind,HIGH);
         behind();
         delay(30);
         stop();
@@ -302,7 +300,7 @@ void warning_fire(){
   delay(350);
   digitalWrite(led_behind,HIGH);
   delay(350);
-  dgiatalWrite(led_behind,LOW);
+  digitalWrite(led_behind,LOW);
   delay(350);
 }
 void thor(){
