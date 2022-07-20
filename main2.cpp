@@ -30,8 +30,16 @@ int right_reverse=26;
 int left_down= 13;
 int left_reverse= 27;
 bool Pir;
-int pir_pin= 23;
-int LED_blue =19;
+
+int pir_pin_bot= 22;
+int pir_pin_right= 15;
+int pir_pin_left= 23;
+
+
+
+int led_behind=24;
+int led_front_left=21     ;
+int led_front_right=18;
 //functions
 
 long getDistance();
@@ -73,7 +81,7 @@ void setup() {
   pinMode(left_reverse, OUTPUT);
   pinMode(left_down, OUTPUT);
 
-  pinMode(pir_pin, INPUT);
+  pinMode(pir_pin_bot, INPUT);
   pinMode(LED_blue, OUTPUT);
    myservo.attach(33);
 
@@ -89,7 +97,7 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
-  Pir=digitalRead(pir_pin);
+  Pir=digitalRead(pir_pin_bot);
   distanceCm= getDistance();
   char buffer[50];
  
