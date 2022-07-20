@@ -86,7 +86,7 @@ value_pbot=digitalRead(pir_bot);
 }
 
 void ai(){
-    if(pir_bot==1||pir_left==0||pir_right==0||distanceCm <= 40){
+    if(distanceCm <= 40){
         behind();
         delay(30);
         stop();
@@ -107,7 +107,73 @@ void ai(){
             delay(100);
         }
     }
-    else if(pir_bot==0||pir_left==0||pir_right==1||distanceCm > 40){
+    else if(pir_bot ==1 ){
+         behind();
+        delay(30);
+        stop();
+        delay(300);
+        lookRight();
+        lookLeft();
+        delay(100);
+        if(distanceRight < distanceLeft){
+            right();
+            delay(300);
+            stop();
+            delay(100);
+        }
+        else if(distanceRight > distanceLeft){
+            left();
+            delay(300);
+            stop();
+            delay(100);
+        }
+
+    }
+    else if(pir_left==0 ){
+         behind();
+        delay(30);
+        stop();
+        delay(300);
+        lookRight();
+        lookLeft();
+        delay(100);
+        if(distanceRight < distanceLeft){
+            right();
+            delay(300);
+            stop();
+            delay(100);
+        }
+        else if(distanceRight > distanceLeft){
+            left();
+            delay(300);
+            stop();
+            delay(100);
+        }
+        
+    }
+    else if(pir_right==0){
+         behind();
+        delay(30);
+        stop();
+        delay(300);
+        lookRight();
+        lookLeft();
+        delay(100);
+        if(distanceRight < distanceLeft){
+            right();
+            delay(300);
+            stop();
+            delay(100);
+        }
+        else if(distanceRight > distanceLeft){
+            left();
+            delay(300);
+            stop();
+            delay(100);
+        }
+        
+    }
+    else{
         front();
         delay(5000);
     }
