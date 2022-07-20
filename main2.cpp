@@ -31,9 +31,12 @@ int right_reverse=26;
 int left_down= 13;
 int left_reverse= 27;
 
-int pir_bot= 22 ;   bool value_pbot;
-int pir_right= 15 ; bool  value_pright;
-int pir_left= 23;   bool value_pleft;
+ bool value_pbot;
+ bool  value_pright;
+bool value_pleft;
+int pir_bot= 22 ;   
+int pir_right= 15 ;
+int pir_left= 23;   
 
 int led_behind=14;
 int led_left=19;   
@@ -104,13 +107,12 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
+  
   value_pbot=digitalRead(pir_bot);
   value_pleft=digitalRead(pir_left);
   value_pright=digitalRead(pir_right);
   value_fire=digitalRead(fire);
-  if(value_fire == 0){
-    warning_fire();
-  }
+
   distanceCm= getDistance();
   char buffer[20];
   char buffer2[20];
@@ -250,7 +252,7 @@ void stop(){
     delay(500);
 }
 void ai(){
-   if(distanceCm <= 40 ||pir_left==0||pir_right==0||pir_bot==1){
+   if(pir_bot==1||pir_left==0||pir_right==0||distanceCm <= 40 ){
         digitalWrite(led_behind,HIGH);
         behind();
         delay(30);
