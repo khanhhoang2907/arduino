@@ -106,23 +106,23 @@ void loop(){
 
   va_pir1=digitalRead(pir1);
   va_pir2=digitalRead(pir2);
-  va_fire=digitalRead(fire);
-  distanceCm= getDistance();
+  va_fire=0//digitalRead(fire);
+  
 
   char buffer[50];
   char buffer2[50];
   sprintf(f, "%d", va_fire);
   sprintf(buffer," %s ", f );
   client.publish("21126072/outfire", buffer);
-
+  distanceCm= getDistance();
   sprintf(d, "%d", distanceCm);
   sprintf(buffer2," %s ", d );
-  client.publish("21126072/outdis", buffer2);
+  client.publish("21126072/outdistance", buffer2);
   if(Auto ==1){
     ai();
   }
-  // ThingSpeak.setField(1,WiFi.RSSI());// 
-  // ThingSpeak.writeFields(CHANNEL_ID,CHANNEL_API_KEY);
+   ThingSpeak.setField(1,WiFi.RSSI());// 
+  ThingSpeak.writeFields(CHANNEL_ID,CHANNEL_API_KEY);
   delay(5);
   
 }
@@ -156,7 +156,7 @@ void mqttReconnect(){
       client.subscribe(TopicSubscribe);
     }
     else{
-      Serial.println("try again in 1 seconds");
+      Serial.println("try again in 3 seconds");
       delay(1000);
     }
   }
@@ -300,20 +300,20 @@ void callback(char* topic, byte* message, unsigned int length){
   if(stMessage =="clean_on"){  
     digitalWrite(clean,HIGH);
   }
-  else if(stMessage =="led_on"){ 
-    digitalWrite(led,HIGH);  
-        }
+  else if(stMessage =="clean_off"){ 
+    digitalWrite(clean,LOW);  }
+
   else if(stMessage =="led_off"){  
           digitalWrite(led,LOW); 
         }
-  else if(stMessage =="clean_off"){ 
-    digitalWrite(clean,LOW);  
+  else if(stMessage =="led_on"){ 
+    digitalWrite(led,HIGH);  
         }
   else if(stMessage =="front"){  
             b_front(); 
         }
   else if(stMessage =="left"){  
-      b_left(); 
+            b_left(); 
   }
   else if(stMessage =="right"){  
             b_right(); 
