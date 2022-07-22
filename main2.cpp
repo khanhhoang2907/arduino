@@ -112,17 +112,18 @@ void loop(){
   char buffer[50];
   char buffer2[50];
   sprintf(f, "%d", va_fire);
-  sprintf(buffer," %s ", f );
-  client.publish("21126072/outfire", buffer);
+  sprintf(buffer2," %s ", f );
+  client.publish("21126072/outfire", buffer2);
   distanceCm= getDistance();
+
   sprintf(d, "%d", distanceCm);
   sprintf(buffer2," %s ", d );
   client.publish("21126072/outdistance", buffer2);
   if(Auto ==1){
     ai();
   }
-   ThingSpeak.setField(1,WiFi.RSSI());// 
-  ThingSpeak.writeFields(CHANNEL_ID,CHANNEL_API_KEY);
+  //  ThingSpeak.setField(1,WiFi.RSSI());// 
+  // ThingSpeak.writeFields(CHANNEL_ID,CHANNEL_API_KEY);
   delay(5);
   
 }
