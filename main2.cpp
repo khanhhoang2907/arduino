@@ -111,13 +111,13 @@ void loop(){
 
   char buffer[50];
   char buffer2[50];
-  sprintf(f, "%d\n", va_fire);
+  sprintf(f, "%d", va_fire);
   sprintf(buffer," %s ", f );
   client.publish("21126072/outfire", buffer);
 
-  sprintf(d, "%d\n", distanceCm);
+  sprintf(d, "%d", distanceCm);
   sprintf(buffer2," %s ", d );
-  client.publish("21126072/outdis", buffe2);
+  client.publish("21126072/outdis", buffer2);
   if(Auto ==1){
     ai();
   }
