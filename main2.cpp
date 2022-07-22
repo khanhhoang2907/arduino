@@ -177,14 +177,16 @@ int pir_setup(){
   }
 }
 void ai(){
-   if(Pir==0 || distanceCm <= 40){
-        digitalWrite(LED_blue,HIGH);
-        behind();
-        delay(30);
+   if(distanceCm <= 40|| pir_setup()==1){
+      digitalWrite(led,HIGH);
         stop();
         lookRight();
         lookLeft();
-        delay(100);
+        delay(1000);
+        behind();
+        
+        stop();
+        
         if(distanceRight < distanceLeft){
             right();
             delay(600);
@@ -198,11 +200,12 @@ void ai(){
             delay(100);
         }
     }
-    else if(Pir==1 || distanceCm> 40){
-      digitalWrite(LED_blue,LOW);
+    else if(distanceCm>40||pir_setup()==0){
+      digitalWrite(led,LOW);
+      digitalWrite(led2,LOW);
         front();
-        
     }
+    
 }
 //setting motor 
 
