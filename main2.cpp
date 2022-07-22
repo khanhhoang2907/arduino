@@ -110,13 +110,14 @@ void loop(){
   distanceCm= getDistance();
 
   char buffer[50];
+  char buffer2[50];
   sprintf(f, "%d\n", va_fire);
   sprintf(buffer," %s ", f );
   client.publish("21126072/outfire", buffer);
 
   sprintf(d, "%d\n", distanceCm);
-  sprintf(buffer," %s ", d );
-  client.publish("21126072/outdis", buffer);
+  sprintf(buffer2," %s ", d );
+  client.publish("21126072/outdis", buffe2);
   if(Auto ==1){
     ai();
   }
