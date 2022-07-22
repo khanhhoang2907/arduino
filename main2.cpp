@@ -121,8 +121,8 @@ void loop(){
   if(Auto ==1){
     ai();
   }
-   ThingSpeak.setField(1,WiFi.RSSI());// 
-  ThingSpeak.writeFields(CHANNEL_ID,CHANNEL_API_KEY);
+  // ThingSpeak.setField(1,WiFi.RSSI());// 
+  // ThingSpeak.writeFields(CHANNEL_ID,CHANNEL_API_KEY);
   delay(5);
   
 }
