@@ -2,7 +2,10 @@
 #include<WiFi.h>
 #include "PubSubClient.h"
 #include <Servo.h>
+#include <ThingSpeak.h>
 
+#define CHANNEL_ID 1805335
+#define CHANNEL_API_KEY "OAQLJDH4IFA228CW"
 Servo myservo;
 
 const char* ssid = "Hoang Anh";
@@ -117,6 +120,8 @@ void loop(){
   if(Auto ==1){
     ai();
   }
+   ThingSpeak.setField(1,WiFi.RSSI());// 
+  ThingSpeak.writeFields(CHANNEL_ID,CHANNEL_API_KEY);
   delay(5);
   
 }
