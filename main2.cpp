@@ -296,6 +296,12 @@ void callback(char* topic, byte* message, unsigned int length){
   if(stMessage =="clean_on"){  
     digitalWrite(clean,HIGH);
   }
+  else if(stMessage =="led_on"){ 
+    digitalWrite(led,HIGH);  
+        }
+  else if(stMessage =="led_off"){  
+          digitalWrite(led,LOW); 
+        }
   else if(stMessage =="clean_off"){ 
     digitalWrite(clean,LOW);  
         }
