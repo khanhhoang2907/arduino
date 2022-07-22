@@ -2,15 +2,16 @@
 Servo myservo;
 
 bool Auto =0;
-bool value_pbot;
-bool value_pright;
-bool value_pleft;
 
 
-int pir_bot= 22 ;   
-int pir_right= 15 ;
-int pir_left= 23;   
-
+int pir1=23;
+int pir2=21;   
+bool va_pir1;
+bool va_pir2;
+int fire=5;
+bool va_fire;
+int led =25;
+int led2=19;
 int distanceCm;
 int distanceRight;
 int distanceLeft;
@@ -26,12 +27,7 @@ int left_down= 13;
 int left_reverse= 27;
 char d[20];
 char f[20];
-int led_behind=14;
-int led_left=19;   
-int led_right=18;
-bool value_fire; // cam bien lua
 
-int fire= 5 ;
 long getDistance();
 
 void front();
@@ -48,10 +44,9 @@ void b_behind();
 //
 int lookLeft();
 int lookRight();
-
+int pir_setup();
 void ai();
-void warning_fire();///
-void thor();///
+
 
 void setup() {
   Serial.begin(9600);
@@ -64,79 +59,45 @@ void setup() {
   pinMode(right_down, OUTPUT);
   pinMode(left_reverse, OUTPUT);
   pinMode(left_down, OUTPUT);
-  pinMode(pir_bot,INPUT);
-    pinMode(pir_right, INPUT);
-    pinMode(pir_left, INPUT);
+  pinMode(led2,OUTPUT);
+  pinMode(pir1,INPUT);
+  pinMode(pir2,INPUT);
+  pinMode(fire,INPUT);
+  pinMode(led,OUTPUT);
 // LED
-  pinMode(led_behind, OUTPUT);
-  pinMode(led_right, OUTPUT);
-  pinMode(led_left, OUTPUT);
+  
   myservo.attach(33);
   myservo.write(90);
 //pinMode
   
 }
 void loop(){
-value_pbot=digitalRead(pir_bot);
-  value_pleft=digitalRead(pir_left);
-  value_pright=digitalRead(pir_right);
-  value_fire=digitalRead(fire);
+    va_pir1=digitalRead(pir1);
+    va_pir2=digitalRead(pir2);
+    va_fire=digitalRead(fire);
     distanceCm= getDistance();
+    
     ai(); 
+    delay(1);
 }
 
 void ai(){
-    if(distanceCm <= 40){
-        behind();
-        delay(30);
-        stop();
-        delay(300);
-        lookRight();
-        lookLeft();
-        delay(100);
-        if(distanceRight < distanceLeft){
-            right();
-            delay(300);
-            stop();
-            delay(100);
-        }
-        else if(distanceRight > distanceLeft){
-            left();
-            delay(300);
-            stop();
-            delay(100);
-        }
-    }
-    else if(pir_bot ==1 ){
-         behind();
-        delay(30);
-        stop();
-        delay(300);
-        lookRight();
-        lookLeft();
-        delay(100);
-        if(distanceRight < distanceLeft){
-            right();
-            delay(300);
-            stop();
-            delay(100);
-        }
-        else if(distanceRight > distanceLeft){
-            left();
-            delay(300);
-            stop();
-            delay(100);
-        }
+//   if(va_fire==1){
+//         digitalWrite(led,LOW);
 
-    }
-    else if(pir_left==0 ){
-         behind();
-        delay(30);
+//     }
+//     else if(va_fire==0){
+//         digitalWrite(led,HIGH);}
+    if(distanceCm <= 40|| pir_setup()==1){
+      digitalWrite(led,HIGH);
         stop();
-        delay(300);
         lookRight();
         lookLeft();
-        delay(100);
+        delay(1000);
+        behind();
+        
+        stop();
+        
         if(distanceRight < distanceLeft){
             right();
             delay(300);
@@ -149,37 +110,30 @@ void ai(){
             stop();
             delay(100);
         }
-        
     }
-    else if(pir_right==0){
-         behind();
-        delay(30);
-        stop();
-        delay(300);
-        lookRight();
-        lookLeft();
-        delay(100);
-        if(distanceRight < distanceLeft){
-            right();
-            delay(300);
-            stop();
-            delay(100);
-        }
-        else if(distanceRight > distanceLeft){
-            left();
-            delay(300);
-            stop();
-            delay(100);
-        }
-        
-    }
-    else{
+    else if(distanceCm>40||pir_setup()==0){
+      digitalWrite(led,LOW);
+      digitalWrite(led2,LOW);
         front();
-        delay(5000);
     }
+    
 }
 
-
+int pir_setup(){
+  if(va_pir1==1){
+    return 1;
+  }
+  else if(va_pir1 ==0){
+    if(va_pir2==0)
+    {
+      return 1;
+    }
+    else if(va_pir2==1)
+     {
+       return 0;
+     }
+  }
+}
 int lookRight(){
     myservo.write(180);              
     delay(1000);
@@ -229,6 +183,7 @@ void right(){
     delay (500);
 }
 void behind(){
+    digitalWrite(led2,HIGH);
     digitalWrite(right_reverse,HIGH);
     digitalWrite(left_reverse,HIGH);
     digitalWrite(right_down,LOW);
@@ -240,5 +195,5 @@ void stop(){
     digitalWrite(right_reverse,LOW);
     digitalWrite(left_down,LOW);
     digitalWrite(left_reverse,LOW);
-    delay(500);
+    
 }

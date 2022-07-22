@@ -2,6 +2,7 @@
 #include<WiFi.h>
 #include "PubSubClient.h"
 #include <Servo.h>
+
 Servo myservo;
 
 const char* ssid = "Hoang Anh";
@@ -10,10 +11,6 @@ const char* password = "88889999";
 const char* mqttServer = "broker.hivemq.com";
 const char *MqttId = "12345678";
 int port = 1883;
-bool Auto =0;
-bool value_pbot;
-bool value_pright;
-bool value_pleft;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -22,8 +19,8 @@ const char *TopicSubscribe = "21126072/control";
 int distanceCm;
 int distanceRight;
 int distanceLeft;
-char d[20];
-char f[20];
+char d[50];
+char f[50];
 
 int trig_pin=32;
 int echo_pin=35;
@@ -35,19 +32,17 @@ int right_reverse=26;
 int left_down= 13;
 int left_reverse= 27;
 
+int led =25;
+int led2=19;
+
+int pir1=23;   bool va_pir1;
+int pir2=21;   bool va_pir2;
+int fire=5;    bool va_fire;
 
 
-int pir_bot= 22 ;   
-int pir_right= 15 ;
-int pir_left= 23;   
-
-int led_behind=14;
-int led_left=19;   
-int led_right=18;
-bool value_fire; // cam bien lua
-
-int fire= 5 ; 
+bool Auto =0;
 //functions
+
 long getDistance();
 void wifiConnect();
 void mqttReconnect();
@@ -64,13 +59,10 @@ void b_left();
 void b_right();
 void b_behind();
 //
-
+int pir_setup();
 void ai();
 int lookRight();
 int lookLeft();
-
-void warning_fire();///
-void thor();///
 //functions
 void callback(char* topic, byte* message, unsigned int length);
 //
@@ -89,14 +81,12 @@ void setup() {
   pinMode(right_down, OUTPUT);
   pinMode(left_reverse, OUTPUT);
   pinMode(left_down, OUTPUT);
-// PIR
-    pinMode(pir_bot,INPUT);
-    pinMode(pir_right, INPUT);
-    pinMode(pir_left, INPUT);
-// LED
-  pinMode(led_behind, OUTPUT);
-  pinMode(led_right, OUTPUT);
-  pinMode(led_left, OUTPUT);
+  pinMode(pir1,INPUT);
+  pinMode(pir2,INPUT);
+  pinMode(fire,INPUT);
+  pinMode(led2,OUTPUT);
+  pinMode(led,OUTPUT);
+
   myservo.attach(33);
   myservo.write(90);
 //pinMode
@@ -110,28 +100,24 @@ void loop(){
     mqttReconnect();
   }
   client.loop();
-  
-  value_pbot=digitalRead(pir_bot);
-  value_pleft=digitalRead(pir_left);
-  value_pright=digitalRead(pir_right);
-  value_fire=digitalRead(fire);
 
+  va_pir1=digitalRead(pir1);
+  va_pir2=digitalRead(pir2);
+  va_fire=digitalRead(fire);
   distanceCm= getDistance();
-  char buffer[20];
-  char buffer2[20];
- 
+
+  char buffer[50];
+  sprintf(f, "%d\n", va_fire);
+  sprintf(buffer," %s ", f );
+  client.publish("21126072/outfire", buffer);
+
   sprintf(d, "%d\n", distanceCm);
   sprintf(buffer," %s ", d );
-  client.publish("21126072/outdistance", buffer);
-
-  sprintf(f, "%d\n", value_fire);
-  sprintf(buffer2," %s ", f );
-  client.publish("21126072/outfire", buffer2);
-
+  client.publish("21126072/outdis", buffer);
   if(Auto ==1){
     ai();
   }
-  delay(1);
+  delay(5);
   
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,47 +154,76 @@ void mqttReconnect(){
       delay(1000);
     }
   }
-}    
+}
+
+int pir_setup(){
+  if(va_pir1==1){
+    return 1;
+  }
+  else if(va_pir1 ==0){
+    if(va_pir2==0)
+    {
+      return 1;
+    }
+    else if(va_pir2==1)
+     {
+       return 0;
+     }
+  }
+}
+void ai(){
+   if(Pir==0 || distanceCm <= 40){
+        digitalWrite(LED_blue,HIGH);
+        behind();
+        delay(30);
+        stop();
+        lookRight();
+        lookLeft();
+        delay(100);
+        if(distanceRight < distanceLeft){
+            right();
+            delay(600);
+            stop();
+            delay(100);
+        }
+        else if(distanceRight > distanceLeft){
+            left();
+            delay(600);
+            stop();
+            delay(100);
+        }
+    }
+    else if(Pir==1 || distanceCm> 40){
+      digitalWrite(LED_blue,LOW);
+        front();
+        
+    }
+}
 //setting motor 
+
 void b_front(){
     static bool on_front= 0;
     on_front=!on_front;
-        if(on_front==true){
-            front();
-        }
-        else{
-            stop();
-        }   
+        if(on_front==true){front();}
+        else{stop();}   
 }
 void b_left(){
   static bool on_left= 0;
     on_left=!on_left;
-        if(on_left==true){
-            left();
-        }
-        else{
-            stop();
-        }
+        if(on_left==true){left();}
+        else{stop();}
 }
 void b_right(){
   static bool on_right= 0;
        on_right=!on_right;
-        if(on_right==true){
-              right();
-        }
-        else {
-        stop(); 
-        } 
+        if(on_right==true){right();}
+        else {stop(); } 
 }
 void b_behind(){
   static bool on_behind= 0;
         on_behind=!on_behind;
-        if(on_behind==true){
-            behind();
-    }
-        else{
-        stop();
-        }
+        if(on_behind==true){behind();}
+        else{stop();}
     }
 
 
@@ -235,17 +250,12 @@ void right(){
     delay (500);
 }
 void behind(){
+   digitalWrite(led2,HIGH);
     digitalWrite(right_reverse,HIGH);
     digitalWrite(left_reverse,HIGH);
     digitalWrite(right_down,LOW);
     digitalWrite(left_down,LOW);
     delay(500);
-    digitalWrite(left_down,HIGH);
-    delay(200);
-    digitalWrite(left_down,LOW);
-    delay(200);
-    digitalWrite(left_down,HIGH);
-    delay(200);
 }
 void stop(){
     digitalWrite(right_down,LOW);
@@ -254,41 +264,13 @@ void stop(){
     digitalWrite(left_reverse,LOW);
     delay(500);
 }
-void ai(){
-   if(pir_bot==1||pir_left==0||pir_right==0||distanceCm <= 40 ){
-        digitalWrite(led_behind,HIGH);
-        behind();
-        delay(30);
-        stop();
-        lookRight();
-        lookLeft();
-        delay(100);
-        if(distanceRight < distanceLeft){
-            right();
-            delay(300);
-            stop();
-            delay(100);
-        }
-        else if(distanceRight > distanceLeft){
-            left();
-            delay(300);
-            stop();
-            delay(100);
-        }
-    }
-    else{
-        front();
-        
-    }
-}
+
 
 int lookRight(){
     myservo.write(180);              
     delay(1000);
     distanceRight= getDistance();
     myservo.write(90);
-    digitalWrite(led_right,HIGH);
-    digitalWrite(led_left,LOW);
     return distanceRight;
 }
 int lookLeft(){
@@ -296,32 +278,7 @@ int lookLeft(){
     delay(1000);
     distanceLeft= getDistance();
     myservo.write(90);
-    digitalWrite(led_right,LOW);
-    digitalWrite(led_left,HIGH);
     return distanceLeft;
-}
-void warning_fire(){
-  digitalWrite(led_behind,LOW);
-  delay(350);
-  digitalWrite(led_behind,HIGH);
-  delay(350);
-  digitalWrite(led_behind,LOW);
-  delay(350);
-}
-void thor(){
-  for(int i=0;i<20;i++){
-      if(i%2==1){
-          digitalWrite(led_right,HIGH);
-          digitalWrite(led_left,LOW);
-          delay(60);
-      }
-      else if(i%2==0){
-        digitalWrite(led_right,LOW);
-        digitalWrite(led_left,HIGH);
-        delay(60);
-
-      }
-  }
 }
 void callback(char* topic, byte* message, unsigned int length){
   Serial.println(topic);
@@ -337,14 +294,6 @@ void callback(char* topic, byte* message, unsigned int length){
   else if(stMessage =="clean_off"){ 
     digitalWrite(clean,LOW);  
         }
-  else if(stMessage =="led_on"){
-      digitalWrite(led_left,HIGH);
-      digitalWrite(led_right,HIGH);
-  }
-  else if(stMessage =="led_off"){
-      digitalWrite(led_left,LOW);
-      digitalWrite(led_right,LOW);
-  }
   else if(stMessage =="front"){  
             b_front(); 
         }
