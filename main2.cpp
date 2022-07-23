@@ -29,7 +29,7 @@ int trig_pin=32;
 int echo_pin=35;
 
 int clean =34;
-
+int temp =0;
 int right_down=12;
 int right_reverse=26;
 int left_down= 13;
@@ -68,7 +68,20 @@ int lookRight();
 int lookLeft();
 //functions
 void callback(char* topic, byte* message, unsigned int length);
-//
+//  
+void Delay(float delayTime, void(func)()){
+   unsigned long endTime =millis() + delayTime;
+   while(millis() < endTime){
+     func();
+     while(millis() < endTime){
+     }
+     }
+}
+
+void thing(){
+  ThingSpeak.setField(1,WiFi.RSSI());// 
+  ThingSpeak.writeFields(CHANNEL_ID,CHANNEL_API_KEY);
+}
 void setup() {
   Serial.begin(9600);
   Serial.print("Connecting to WiFi");
@@ -77,13 +90,13 @@ void setup() {
   Serial.println(WiFi.localIP());
 
 //pinMode
-  pinMode(clean, OUTPUT); 
+  pinMode(right_reverse, OUTPUT);
+  pinMode(left_reverse, OUTPUT);
+  pinMode(right_down, OUTPUT);
+  pinMode(left_down, OUTPUT);
   pinMode(trig_pin, OUTPUT);
   pinMode(echo_pin, INPUT);
-  pinMode(right_reverse, OUTPUT);
-  pinMode(right_down, OUTPUT);
-  pinMode(left_reverse, OUTPUT);
-  pinMode(left_down, OUTPUT);
+  pinMode(clean, OUTPUT);
   pinMode(pir1,INPUT);
   pinMode(pir2,INPUT);
   pinMode(fire,INPUT);
@@ -122,13 +135,12 @@ void loop(){
   if(Auto ==1){
     ai();
   }
-  //  ThingSpeak.setField(1,WiFi.RSSI());// 
-  // ThingSpeak.writeFields(CHANNEL_ID,CHANNEL_API_KEY);
+  Delay(2000,thing);
   delay(5);
   
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
- 
+
 long getDistance(){
   digitalWrite(trig_pin, LOW);
   delayMicroseconds(2);
