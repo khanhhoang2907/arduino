@@ -70,31 +70,15 @@ int lookLeft();
 void callback(char* topic, byte* message, unsigned int length);
 //  
 void Delay(float delayTime, void(func)()){
-   unsigned long endTime =millis() + delayTime;
-   while(millis() < endTime){
-     func();
-     while(millis() < endTime){
-     }
-     }
+       unsigned long endTime = millis() + delayTime;
+    while(millis() < endTime)
+    {
+      func();
+      while(millis() < endTime){};  //Xóa dòng này nếu muốn lặp hàm func, giữ nếu muốn chạy hàm func 1 lần.
+    }
 }
-void bf(){
-    if(!client.connected())
-  {
-    mqttReconnect();
-  }
-  client.loop();
-  sprintf(f, "%d", va_fire);
-  sprintf(buffer2," %s ", f );
-  client.publish("21126072/outfire", buffer2);
-  distanceCm= getDistance();
 
-  sprintf(d, "%d", distanceCm);
-  sprintf(buffer2," %s ", d );
-  client.publish("21126072/outdistance", buffer2);
-  if(Auto ==1){
-    ai();
-  }
-}
+
 
 void thing(){
   ThingSpeak.setField(1,WiFi.RSSI());// 
@@ -127,7 +111,32 @@ void setup() {
   client.setServer(mqttServer,port);
   client.setCallback(callback);
 }
+void main(){
 
+  if(!client.connected())
+  {
+    mqttReconnect();
+  }
+  client.loop();
+
+  va_pir1=digitalRead(pir1);
+  va_pir2=digitalRead(pir2);
+  va_fire=digitalRead(fire);
+  
+  char buffer[50];
+  char buffer2[50];
+  sprintf(f, "%d", va_fire);
+  sprintf(buffer2," %s ", f );
+  client.publish("21126072/outfire", buffer2);
+  distanceCm= getDistance();
+
+  sprintf(d, "%d", distanceCm);
+  sprintf(buffer2," %s ", d );
+  client.publish("21126072/outdistance", buffer2);
+  if(Auto ==1){
+    ai();
+  }
+  }
 void loop(){
   // if(!client.connected())
   // {
@@ -135,13 +144,12 @@ void loop(){
   // }
   // client.loop();
 
-  va_pir1=digitalRead(pir1);
-  va_pir2=digitalRead(pir2);
-  va_fire=0//digitalRead(fire);
+  // va_pir1=digitalRead(pir1);
+  // va_pir2=digitalRead(pir2);
+  // va_fire=digitalRead(fire);
   
-
-  char buffer[50];
-  char buffer2[50];
+  // char buffer[50];
+  // char buffer2[50];
   // sprintf(f, "%d", va_fire);
   // sprintf(buffer2," %s ", f );
   // client.publish("21126072/outfire", buffer2);
@@ -153,8 +161,8 @@ void loop(){
   // if(Auto ==1){
   //   ai();
   // }
-  Delay(50000,bf);
-  Delay(2000,thing);
+  Delay(5,main);
+  //Delay(200,thing);
   delay(5);
   
 }
